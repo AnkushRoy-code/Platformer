@@ -19,10 +19,4 @@ add_custom_target(CopyResources ALL
     COMMENT "Copying resources to the build directory."
 )
 
-# Find libraries
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-
-# Add subdirectories for project components
 add_subdirectory(Platformer)
-# add_subdirectory(lib/imgui) # Not needed ATM

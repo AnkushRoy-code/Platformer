@@ -11,9 +11,8 @@ class Window
 {
 public:
     static bool init(const std::string &title,
-              SDL_Window *&Window,
-              SDL_Renderer *&Renderer);
-    static void close(SDL_Window *&Window, SDL_Renderer *&Renderer);
+              SDL_Window *&Window);
+    static void close(SDL_Window *&Window);
 };
 
 }  // namespace Platformer::Window

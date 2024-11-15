@@ -9,8 +9,12 @@ namespace Platformer
 class TextureManager
 {
 public:
-    static SDL_Texture *LoadTexture(const std::string &filePath,
-                                    SDL_Renderer *&Renderer);
+    /// @return SDL_Texture
+    /// @param std::string filePath
+    /// @param SDL_Renderer renderer
+    static SDL_Texture *LoadTexture(const std::string &filePath);
+
+    static void Draw(SDL_Texture *tex, SDL_Rect src, SDL_Rect dst);
 };
 }  // namespace Platformer
 

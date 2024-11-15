@@ -1,4 +1,5 @@
 #include "window.h"
+#include "Platformer/Platformer.h"
 
 #include <SDL.h>
 #include <SDL_render.h>
@@ -8,8 +9,7 @@ namespace Platformer
 {
 
 bool Window::init(const std::string &title,
-                  SDL_Window *&Window,
-                  SDL_Renderer *&Renderer)
+                  SDL_Window *&Window)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -18,11 +18,11 @@ bool Window::init(const std::string &title,
         return false;
     }
 
-    auto window_flags = SDL_WindowFlags(SDL_WINDOW_ALLOW_HIGHDPI
-                                        | SDL_WINDOW_FULLSCREEN_DESKTOP);
+    auto window_flags = SDL_WindowFlags(SDL_WINDOW_ALLOW_HIGHDPI);
+                                        // | SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     Window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, 0, 0, window_flags);
+                              SDL_WINDOWPOS_UNDEFINED, 800, 640, window_flags);
 
     if (Window == nullptr)
     {
@@ -31,15 +31,15 @@ bool Window::init(const std::string &title,
         return false;
     }
 
-    Renderer = SDL_CreateRenderer(Window, -1, 0);
+    Game::mRenderer = SDL_CreateRenderer(Window, -1, 0);
 
     return true;
 }
 
-void Window::close(SDL_Window *&Window, SDL_Renderer *&Renderer)
+void Window::close(SDL_Window *&Window)
 {
     SDL_DestroyWindow(Window);
-    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyRenderer(Game::mRenderer);
     SDL_Quit();
 }
 }  // namespace Platformer

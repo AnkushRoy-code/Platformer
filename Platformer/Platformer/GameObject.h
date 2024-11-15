@@ -12,7 +12,6 @@ class GameObject
 {
 public:
     GameObject(const std::string &textureFilePath,
-               SDL_Renderer *&Renderer,
                int x_Pos,
                int y_Pos);
     ~GameObject() = default;
@@ -25,7 +24,6 @@ private:
 
     SDL_Texture *objTexture {};
     SDL_Rect srcRect {}, dstRect {};
-    SDL_Renderer *mRenderer {};
 };
 
 }  // namespace Platformer

@@ -1,16 +1,16 @@
 #include "GameObject.h"
+
+#include "Platformer.h"
 #include "utils/TextureManager.h"
 #include <SDL_render.h>
 
 namespace Platformer
 {
 GameObject::GameObject(const std::string &textureFilePath,
-                       SDL_Renderer *&Renderer,
                        int x_Pos,
                        int y_Pos) : xPos(x_Pos), yPos(y_Pos)
 {
-    mRenderer  = Renderer;
-    objTexture = TextureManager::LoadTexture(textureFilePath, mRenderer);
+    objTexture = TextureManager::LoadTexture(textureFilePath);
 }
 
 void GameObject::update()
@@ -28,7 +28,7 @@ void GameObject::update()
 
 void GameObject::render()
 {
-    SDL_RenderCopy(mRenderer, objTexture, &srcRect, &dstRect);
+    SDL_RenderCopy(Game::mRenderer, objTexture, &srcRect, &dstRect);
 }
 
 }  // namespace Platformer
