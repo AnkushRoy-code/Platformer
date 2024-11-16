@@ -25,5 +25,5 @@ option(ENABLE_TESTING "Enable building tests" ON)
 
 if(ENABLE_TESTING)
     enable_testing()
-    add_subdirectory(test)
+    add_subdirectory(tests)
 endif()
