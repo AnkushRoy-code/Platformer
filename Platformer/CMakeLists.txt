@@ -13,8 +13,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(EnTT)
 
-add_executable(PlatformerExe
-    main.cpp
+add_library(PlatformerLib
     Platformer/Platformer.cpp
     Platformer/GameObject.cpp
     window/window.cpp
@@ -22,17 +21,19 @@ add_executable(PlatformerExe
     utils/TextureManager.cpp
     utils/Map.cpp
 )
-
-target_include_directories(PlatformerExe PUBLIC
+target_include_directories(PlatformerLib PUBLIC
     ${entt_SOURCE_DIR}/src
     ${SDL2_INCLUDE_DIRS}
     ${SDL2_IMAGE_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/Platformer
 )
 
-target_link_libraries(PlatformerExe PRIVATE
+target_link_libraries(PlatformerLib PUBLIC
     SDL2::SDL2
     SDL2::SDL2main
     SDL2_image::SDL2_image
     EnTT
 )
+
+add_executable(PlatformerExe main.cpp)
+target_link_libraries(PlatformerExe PRIVATE PlatformerLib)
