@@ -20,6 +20,7 @@ add_library(PlatformerLib
     input/eventHandler.cpp
     utils/TextureManager.cpp
     utils/Map.cpp
+    utils/Component.cpp
 )
 target_include_directories(PlatformerLib PUBLIC
     ${entt_SOURCE_DIR}/src

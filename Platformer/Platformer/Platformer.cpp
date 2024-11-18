@@ -4,16 +4,25 @@
 #include "input/eventHandler.h"
 #include "Platformer/GameObject.h"
 #include "utils/Map.h"
+#include "entt/entt.hpp"
+#include "utils/Component.h"
 
 #include <SDL_render.h>
+#include <iostream>
 
 Platformer::GameObject *player;
 Platformer::Map *map;
+
+entt::registry Registry;
+
+auto PlayerEntity = Registry.create();
 
 namespace Platformer
 {
 
 SDL_Renderer *Game::mRenderer = nullptr;
+
+PositionComponent playerComponent;
 
 void Game::init()
 {
@@ -22,7 +31,12 @@ void Game::init()
     mIsRunning = true;
 
     player = new GameObject("res/images/enemy.png", 20, 50);
-    map = new Map();
+    map    = new Map();
+    Registry.emplace<PositionComponent>(PlayerEntity, 10, 10);
+
+    playerComponent = Registry.get<PositionComponent>(PlayerEntity);
+    playerComponent.x = 300;
+    playerComponent.y = 690;
 }
 
 void Game::handleEvents()
@@ -33,6 +47,9 @@ void Game::handleEvents()
 void Game::update()
 {
     player->update();
+    playerComponent.update();
+    std::cout << "Player x: " << playerComponent.x
+              << " y: " << playerComponent.y << "\n";
 }
 
 void Game::render()
@@ -47,6 +64,7 @@ void Game::render()
 void Game::clean()
 {
     Window::close(mWindow);  // Window should close last
+    Registry.destroy(PlayerEntity);
     delete player;
     delete map;
 }
