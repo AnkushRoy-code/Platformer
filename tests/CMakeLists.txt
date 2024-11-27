@@ -1,13 +1,4 @@
-Include(FetchContent)
-
-FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v3.7.0 # or a later release
-    GIT_PROGRESS TRUE
-)
-
-FetchContent_MakeAvailable(Catch2)
+find_package(Catch2 REQUIRED)
 
 add_executable(PlatformerTests
     window/test_window.cpp

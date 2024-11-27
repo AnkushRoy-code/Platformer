@@ -4,6 +4,9 @@
 #include <SDL.h>
 #include <array>
 #include <cstdint>
+#include <GL/glew.h>
+
+
 namespace Platformer
 {
 
@@ -13,17 +16,17 @@ public:
     Map();
     ~Map() = default;
 
-    void loadMap(const std::array<std::array<std::uint8_t, 25>, 20> &arr);
+    void loadMap(const std::array<std::array<std::uint8_t, 30>, 18> &arr);
     void drawMap();
 
 private:
     SDL_Rect dst {}, src {};
 
-    SDL_Texture *dirt {};
-    SDL_Texture *grass {};
-    SDL_Texture *water {};
+    GLuint dirt {};
+    GLuint grass {};
+    GLuint water {};
 
-    std::array<std::array<std::uint8_t, 25>, 20> map {};
+    std::array<std::array<std::uint8_t, 30>, 18> map {};
 };
 
 }  // namespace Platformer

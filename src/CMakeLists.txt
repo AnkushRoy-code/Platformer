@@ -2,7 +2,7 @@ include(FetchContent)
 
 # Find libraries
 find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # Entt Fetch
 FetchContent_Declare(
@@ -13,26 +13,43 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(EnTT)
 
+FetchContent_Declare(
+    GLEW
+    URL https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip
+    URL_HASH SHA256=a9046a913774395a095edcc0b0ac2d81c3aacca61787b39839b941e9be14e0d4
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(GLEW)
+
 add_library(PlatformerLib
+    Platformer/eventHandler.cpp
     Platformer/Platformer.cpp
-    Platformer/GameObject.cpp
-    window/window.cpp
-    input/eventHandler.cpp
-    utils/TextureManager.cpp
-    utils/Map.cpp
+    Platformer/window.cpp
+    Platformer/OpenGL.cpp
+
     utils/Component.cpp
+    # utils/GameObject.cpp
+    utils/Map.cpp
+    utils/TextureManager.cpp
+    utils/Time.cpp
 )
 target_include_directories(PlatformerLib PUBLIC
     ${entt_SOURCE_DIR}/src
     ${SDL2_INCLUDE_DIRS}
-    ${SDL2_IMAGE_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/Platformer
+    ${OPENGL_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIRS}
+    # ${SDL2_IMAGE_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/lib
 )
 
 target_link_libraries(PlatformerLib PUBLIC
     SDL2::SDL2
     SDL2::SDL2main
-    SDL2_image::SDL2_image
+    OpenGL::GL
+    OpenGL::OpenGL
+    OpenGL::GLU
+    GLEW
     EnTT
 )
 

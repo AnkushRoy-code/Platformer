@@ -3,6 +3,7 @@
 
 #include <SDL_rect.h>
 #include <SDL_render.h>
+#include <filesystem>
 #include <string>
 
 namespace Platformer
@@ -11,7 +12,7 @@ namespace Platformer
 class GameObject
 {
 public:
-    GameObject(const std::string &textureFilePath,
+    GameObject(const std::filesystem::path &textureFilePath,
                int x_Pos,
                int y_Pos);
     ~GameObject() = default;
