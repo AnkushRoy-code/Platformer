@@ -17,7 +17,7 @@ namespace Platformer
 {
 
 // https://github.com/indianakernick/EnTT-Pacman/blob/master/src/core/app.cpp#L22
-float getScaleFactor()
+float Window::getScaleFactor()
 {
     SDL_Rect bounds {};
 
@@ -61,9 +61,12 @@ bool Window::init(const std::string &Title,
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                         SDL_GL_CONTEXT_PROFILE_CORE);
 
-    Window = SDL_CreateWindow(Title.c_str(), SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, scaleFactor * 30 * 32,
-                              scaleFactor * 18 * 32, window_flags);
+    Window = SDL_CreateWindow(
+        Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+        // Needs cleanup. Will do later.
+        scaleFactor * 30 * 32,  // The width is tiles * tilesize here 30 * 32
+        scaleFactor * 18 * 32,  // Same as width but 18 * 32
+        window_flags);
 
     if (Window == nullptr)
     {

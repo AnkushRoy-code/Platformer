@@ -3,9 +3,7 @@
 
 namespace Platformer
 {
-// Position Component
 
-// Sprite Component
 Sprite::Sprite(const std::filesystem::path &Path, int Width, int Height) :
     width(Width), height(Height)
 {
@@ -13,14 +11,8 @@ Sprite::Sprite(const std::filesystem::path &Path, int Width, int Height) :
     initialise();
 }
 
-void Sprite::deinitialise()
+Sprite::~Sprite()
 {
-    glDeleteVertexArrays(1, &vaoID);
-    glDeleteBuffers(1, &vboID);
-    glDeleteBuffers(1, &eboID);
-}
-
-Sprite::~Sprite() {
     deinitialise();
 }
 
@@ -66,6 +58,13 @@ void Sprite::initialise()
 
     // Unbind the VAO (optional)
     glBindVertexArray(0);
+}
+
+void Sprite::deinitialise()
+{
+    glDeleteVertexArrays(1, &vaoID);
+    glDeleteBuffers(1, &vboID);
+    glDeleteBuffers(1, &eboID);
 }
 
 }  // namespace Platformer

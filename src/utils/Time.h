@@ -13,22 +13,25 @@ public:
     static void updateDeltaTime();
     static void init();
 
-public:
-    static double deltaTime;
+    /// Delta time or delta timing is the time elapsed between the previous
+    /// frame and the current frame in a game loop.
+    static double deltaTime();
 
 private:
+    static double mDeltaTime;
+
     static std::chrono::time_point<std::chrono::high_resolution_clock>
-        previousTime;
+        mPreviousTime;
     static std::chrono::time_point<std::chrono::high_resolution_clock>
-        currentTime;
+        mCurrentTime;
 
     // --------------------- Cap FPS ---------------------
 public:
     static void capFPS();
 
 private:
-    static const int targetFPS;
-    static const std::chrono::milliseconds frameDuration;  // Frame duration
+    static const int mTargetFPS;
+    static const std::chrono::milliseconds mFrameDuration;  // Frame duration
 };
 
 }  // namespace Platformer

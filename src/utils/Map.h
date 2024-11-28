@@ -16,6 +16,7 @@ public:
     Map();
     ~Map() = default;
 
+    /// Loads an array of ints that should be 30 width and 18 hegiht!
     void loadMap(const std::array<std::array<std::uint8_t, 30>, 18> &arr);
     void drawMap();
 

@@ -15,6 +15,11 @@ namespace Platformer
 class Game
 {
 public:
+    /**
+     * Runs The whole damn thing.
+     *
+     * @return void
+     */
     void run();
 
 private:

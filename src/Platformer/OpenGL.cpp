@@ -20,10 +20,6 @@ void OpenGL::init(GLuint &ShaderProgramme,
         return;
     }
 
-    // Basic OpenGL settings
-    // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     std::cout << "OpenGL initialized successfully!\n";
 
     ShaderProgramme = CreateShaderProgram("res/shader/vertex.glsl",
@@ -132,7 +128,6 @@ GLuint OpenGL::CompileShader(GLenum type, const char *source)
     glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
 
-    // Check for compilation errors
     GLint success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success)

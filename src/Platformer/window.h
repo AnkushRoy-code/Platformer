@@ -10,11 +10,15 @@ namespace Platformer
 class Window
 {
 public:
+    /// Initialises SDL_OpenGL window.
     static bool init(const std::string &Title,
                              SDL_Window *&Window,
                              SDL_GLContext &Context);
 
     static void close(SDL_Window *&Window, SDL_GLContext &Context);
+private:
+    /// @return Float returns the scale factor by which the window sshould be scaled so that the thing is at its maximum.
+    static float getScaleFactor();
 };
 
 }  // namespace Platformer

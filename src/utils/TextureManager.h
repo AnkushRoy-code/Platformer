@@ -11,7 +11,7 @@ namespace Platformer
 class TextureManager
 {
 public:
-    /// @return GLuint
+    /// @return GLuint Texture
     /// @param std::filesystem::path filePath
     static GLuint LoadTexture(const std::filesystem::path &filePath);
 

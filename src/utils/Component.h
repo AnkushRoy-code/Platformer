@@ -1,4 +1,5 @@
 
+/// Needs work.
 #ifndef INCLUDE_PLATFORMER_COMPONENT_H_
 #define INCLUDE_PLATFORMER_COMPONENT_H_
 
@@ -8,10 +9,10 @@
 
 namespace Platformer
 {
-
+/// Position in 2D space
 struct Position
 {
-    float x, y;  // Position in 2D space
+    float x, y;
 };
 
 struct Sprite
