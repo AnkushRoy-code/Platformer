@@ -15,7 +15,7 @@ public:
     /// @param std::filesystem::path filePath
     static GLuint LoadTexture(const std::filesystem::path &filePath);
 
-    static void Draw(GLuint tex, SDL_Rect src, SDL_Rect dst);
+    static void Draw(GLuint tex, SDL_FRect rect);
 };
 }  // namespace Platformer
 

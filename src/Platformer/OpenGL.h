@@ -13,6 +13,7 @@ public:
      *
      * Creates Shaderprogramme, takes in GLuint ShaderProgramme, VAO, VBO, EBO as reference and does OpenGL stuff to them.
      *
+     * gotta change this hard worked comments
      * @param ShaderProgramme GLuint& The shader Programme.
      * @param VAO GLuint& VAO the vertex array object.
      * @param VBO GLuint& why am I still writing these... aren't this obvious?
@@ -26,7 +27,7 @@ public:
      * // Now do other OpenGL stuff.
      */
     static void
-        init(GLuint &ShaderProgramme, GLuint &VAO, GLuint &VBO, GLuint &EBO);
+        init();
 
     /**
      * Closes the OpenGL context?
@@ -44,13 +45,9 @@ public:
      * Write me later
      */
     static void
-        close(GLuint &ShaderProgramme, GLuint &VAO, GLuint &VBO, GLuint &EBO);
+        close();
 
 private:
-    static GLuint CreateShaderProgram(const char *vertexPath,
-                                      const char *fragmentPath);
-    static GLuint CompileShader(GLenum type, const char *source);
-    static std::string ReadShaderFile(const char *filePath);
 };
 
 }  // namespace Platformer

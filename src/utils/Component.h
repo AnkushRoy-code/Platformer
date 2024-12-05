@@ -19,8 +19,8 @@ struct Sprite
 {
     Sprite(const std::filesystem::path &Path, int Width, int Height);
     ~Sprite();
-    int width {}, height {};
-    GLuint vaoID {}, vboID {}, eboID {}, textureID {};
+    float width {}, height {};
+    GLuint textureID {};
     void initialise();
     void deinitialise();
 };

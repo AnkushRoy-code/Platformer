@@ -31,8 +31,6 @@ namespace Platformer
 
 Map::Map()
 {
-    src = {0, 0, 32, 32};
-
     dirt  = TextureManager::LoadTexture("res/images/dirt.png");
     grass = TextureManager::LoadTexture("res/images/grass.png");
     water = TextureManager::LoadTexture("res/images/water.png");
@@ -60,21 +58,21 @@ void Map::drawMap()
         {
             type = map[row][column];
 
-            dst.x = column * 32;
-            dst.y = row * 32;
-            dst.w = 32;
-            dst.h = 32;
+            rect.x = column * 32;
+            rect.y = row * 32;
+            rect.w = 32;
+            rect.h = 32;
 
             switch (type)
             {
                 case 0:
-                    TextureManager::Draw(water, src, dst);
+                    TextureManager::Draw(water, rect);
                     break;
                 case 1:
-                    TextureManager::Draw(grass, src, dst);
+                    TextureManager::Draw(grass, rect);
                     break;
                 case 2:
-                    TextureManager::Draw(dirt, src, dst);
+                    TextureManager::Draw(dirt, rect);
                     break;
                 default:
                     break;

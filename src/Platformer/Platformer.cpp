@@ -6,6 +6,7 @@
 
 #include "utils/Map.h"
 #include "utils/Component.h"
+#include "utils/TextureManager.h"
 #include "utils/Time.h"
 
 #include <SDL_video.h>
@@ -44,7 +45,7 @@ void Game::run()
 void Game::init()
 {
     Window::init("Platformer", mWindow, mContext);  // Window should init first
-    OpenGL::init(mShaderProgramme, mVAO, mVBO, mEBO);
+    OpenGL::init();
 
     mIsRunning = true;
 
@@ -64,43 +65,30 @@ void Game::update() {}
 
 void Game::render()
 {
-    glClearColor(30 / 255.0f, 150 / 255.0f, 100 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     map->drawMap();
 
-    glUseProgram(mShaderProgramme);
-
     // Render entities not needed now also doesn't work
-    /* auto view = Registry.view<Position, Sprite>();
+    auto view = Registry.view<Position, Sprite>();
     for (auto entity: view)
     {
         auto &pos    = view.get<Position>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
-        pos.x += 100.0f * Time::deltaTime;
-        pos.y += 100.0f * Time::deltaTime;
+        pos.x += 100.0f * Time::deltaTime();
+        pos.y += 100.0f * Time::deltaTime();
 
-        glBindTexture(GL_TEXTURE_2D, sprite.textureID);
-
-        glm::mat4 model =
-            glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, 0.0f));
-        model = glm::scale(model, glm::vec3(sprite.width, sprite.height, 1.0f));
-
-        GLint modelLoc = glGetUniformLocation(mShaderProgramme, "model");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-        glBindVertexArray(sprite.vaoID);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        glBindVertexArray(0);
-    } */
+        TextureManager::Draw(sprite.textureID,
+                             SDL_FRect {pos.x, pos.y, sprite.width, sprite.height});
+    }
 
     SDL_GL_SwapWindow(mWindow);
 }
 
 void Game::cleanup()
 {
-    OpenGL::close(mShaderProgramme, mVAO, mVBO, mEBO);
+    OpenGL::close();
     Window::close(mWindow, mContext);  // Window should close last
     Registry.destroy(PlayerEntity);
     delete map;

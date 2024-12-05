@@ -33,8 +33,6 @@ private:
     bool mIsRunning {};
     SDL_Window *mWindow {};
     SDL_GLContext mContext {};
-    GLuint mShaderProgramme {};
-    GLuint mVAO {}, mVBO{}, mEBO{};
 };
 
 }  // namespace Platformer

@@ -21,7 +21,7 @@ public:
     void drawMap();
 
 private:
-    SDL_Rect dst {}, src {};
+    SDL_FRect rect {};
 
     GLuint dirt {};
     GLuint grass {};
