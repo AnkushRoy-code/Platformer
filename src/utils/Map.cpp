@@ -1,9 +1,10 @@
 #include "utils/TextureManager.h"
+#include "utils/constants.h"
 #include <iostream>
 #include <utils/Map.h>
 
 // clang-format off
-std::array<std::array<std::uint8_t, 30>, 18> lvl1 {{
+std::array<std::array<std::uint8_t, Platformer::TILESET_WIDTH>, Platformer::TILESET_HEIGHT> lvl1 {{
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, },
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
@@ -44,7 +45,7 @@ void Map::init()
     loadMap(lvl1);
 }
 
-void Map::loadMap(const std::array<std::array<std::uint8_t, 30>, 18> &arr)
+void Map::loadMap(const std::array<std::array<std::uint8_t, TILESET_WIDTH>, TILESET_HEIGHT> &arr)
 {
     map = arr;
 }
@@ -52,16 +53,16 @@ void Map::loadMap(const std::array<std::array<std::uint8_t, 30>, 18> &arr)
 void Map::drawMap()
 {
     int type {};
-    for (int row = 0; row < 18; row++)
+    for (int row = 0; row < TILESET_HEIGHT; row++)
     {
-        for (int column = 0; column < 30; column++)
+        for (int column = 0; column < TILESET_WIDTH; column++)
         {
             type = map[row][column];
 
-            rect.x = column * 32;
-            rect.y = row * 32;
-            rect.w = 32;
-            rect.h = 32;
+            rect.x = column;
+            rect.y = row;
+            rect.w = 1;
+            rect.h = 1;
 
             switch (type)
             {

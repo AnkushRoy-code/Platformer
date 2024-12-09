@@ -8,7 +8,6 @@
 #include "box2d/id.h"
 #include "entt/entity/fwd.hpp"
 #include "utils/Map.h"
-#include "Platformer/Physics.h"
 
 #include <SDL.h>
 
@@ -39,7 +38,6 @@ private:
 private:
     bool mIsRunning {};
     Map mMap {};
-    Physics mPhysics {};
 };
 
 }  // namespace Platformer

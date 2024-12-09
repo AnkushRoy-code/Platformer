@@ -1,5 +1,7 @@
 #include "OpenGL.h"
 #include "utils/TextureManager.h"
+#include "Platformer/window.h"
+#include "utils/constants.h"
 #include <GL/glu.h>
 #include <iostream>
 
@@ -11,8 +13,8 @@ void OpenGL::init()
     glClearColor(30 / 255.0f, 150 / 255.0f, 100 / 255.0f, 1.0f);
 
     constexpr auto scale  = 1.3333;
-    constexpr auto Width  = 30 * 32 * scale;
-    constexpr auto Height = 18 * 32 * scale;
+    constexpr auto Width  = TILESET_WIDTH * TILESET_SIZE * scale;
+    constexpr auto Height = TILESET_HEIGHT * TILESET_SIZE * scale;
 
     glViewport(0, 0, Width, Height);
 
@@ -30,9 +32,9 @@ void OpenGL::init()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glScalef(1.33f, 1.33f, 1.33f);
+    double f = Window::WindowScale * TILESET_SIZE;
+    glScalef(f, f, f);
 
-    std::cout << "OpenGL initialized successfully!\n";
 }
 
 void OpenGL::close() {}

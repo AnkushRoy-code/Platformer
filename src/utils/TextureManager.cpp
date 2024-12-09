@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include <SDL_rect.h>
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -30,7 +31,7 @@ GLuint TextureManager::LoadTexture(const std::filesystem::path &filePath)
 
     GLuint texture;
     glGenTextures(1, &texture);
-    
+
     glBindTexture(GL_TEXTURE_2D, texture);
 
     // Set texture parameters

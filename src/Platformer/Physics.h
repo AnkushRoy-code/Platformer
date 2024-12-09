@@ -9,21 +9,11 @@ namespace Platformer
 class Physics
 {
 public:
-    void init();
-    void close();
-    void update();
+    static void init();
+    static void close();
+    static void update();
 
-private:
-    b2WorldDef worldDef {};
-    b2WorldId worldId {};
-    b2BodyDef groundBodyDef {};
-    b2BodyId groundId {};
-    b2Polygon groundBox {};
-    b2ShapeDef groundShapeDef {};
-    b2BodyDef bodyDef {};
-    b2BodyId bodyId {};
-    b2Polygon dynamicBox {};
-    b2ShapeDef shapeDef {};
+    static b2WorldId worldId;
 };
 
 }  // namespace Platformer

@@ -1,6 +1,9 @@
 #include "Platformer/window.h"
+#include "utils/constants.h"
 
 #include <SDL.h>
+#include <iomanip>
+#include <string>
 #include <iostream>
 
 float maxF(float a, float b);
@@ -9,8 +12,9 @@ float minF(float a, float b);
 namespace Platformer
 {
 
-SDL_Window *Window::window = nullptr;
+SDL_Window *Window::window      = nullptr;
 SDL_GLContext Window::glContext = nullptr;
+double Window::WindowScale      = 0;
 
 bool Window::init(const std::string &Title)
 {
@@ -22,8 +26,7 @@ bool Window::init(const std::string &Title)
         return false;
     }
 
-    float scaleFactor = getScaleFactor();
-    // scaleFactor       = 1;  // For now, getScaleFactor() needs work.
+    WindowScale = getScaleFactor();
 
     auto window_flags =
         SDL_WindowFlags(SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
@@ -37,8 +40,10 @@ bool Window::init(const std::string &Title)
     window = SDL_CreateWindow(
         Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         // Needs cleanup. Will do later.
-        scaleFactor * 30 * 32,  // The width is tiles * tilesize here 30 * 32
-        scaleFactor * 18 * 32,  // Same as width but 18 * 32
+        WindowScale * TILESET_WIDTH
+            * TILESET_SIZE,  // The width is tiles * tilesize here 30 * 32
+        WindowScale * TILESET_HEIGHT
+            * TILESET_SIZE,  // Same as width but 18 * 32
         window_flags);
 
     if (window == nullptr)
@@ -48,7 +53,6 @@ bool Window::init(const std::string &Title)
         SDL_Quit();
         return false;
     }
-    std::cout << "SDL_Window initialised successfully!\n";
 
     glContext = SDL_GL_CreateContext(window);
     if (!glContext)
@@ -83,16 +87,13 @@ float Window::getScaleFactor()
     SDL_GetDisplayBounds(0, &bounds);
 #endif
 
-    const float scaleX = float(bounds.w) / float(30 * 32);
-    const float scaleY = float(bounds.h) / float(18 * 32);
-
-    std::cout << "scaleFactor: " << maxF(1, minF(scaleX, scaleY)) << std::endl;
+    const float scaleX = float(bounds.w) / float(TILESET_WIDTH * TILESET_SIZE);
+    const float scaleY = float(bounds.h) / float(TILESET_HEIGHT * TILESET_SIZE);
 
     return maxF(1, minF(scaleX, scaleY));
 }
 
 }  // namespace Platformer
-
 
 float maxF(float a, float b)
 {

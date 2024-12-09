@@ -17,6 +17,8 @@ public:
     static SDL_Window *window;
     static SDL_GLContext glContext;
 
+    static double WindowScale;
+
 private:
     /// @return Float returns the scale factor by which the window sshould
     /// be scaled so that the thing is at its maximum.

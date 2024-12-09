@@ -1,7 +1,6 @@
 include(FetchContent)
 
 # Find libraries
-find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(FETCHCONTENT_QUIET FALSE)
@@ -58,6 +57,7 @@ add_library(PlatformerLib
     Platformer/Platformer.cpp
     Platformer/window.cpp
     Platformer/OpenGL.cpp
+    Platformer/Physics.cpp
 
     utils/Component.cpp
     # utils/GameObject.cpp
