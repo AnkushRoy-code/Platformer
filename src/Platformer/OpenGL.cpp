@@ -10,8 +10,9 @@ void OpenGL::init()
 {
     glClearColor(30 / 255.0f, 150 / 255.0f, 100 / 255.0f, 1.0f);
 
-    constexpr auto Width  = 30 * 32;
-    constexpr auto Height = 18 * 32;
+    constexpr auto scale  = 1.3333;
+    constexpr auto Width  = 30 * 32 * scale;
+    constexpr auto Height = 18 * 32 * scale;
 
     glViewport(0, 0, Width, Height);
 
@@ -29,11 +30,11 @@ void OpenGL::init()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glScalef(1.33f, 1.33f, 1.33f);
+
     std::cout << "OpenGL initialized successfully!\n";
 }
 
-void OpenGL::close()
-{
-}
+void OpenGL::close() {}
 
 }  // namespace Platformer

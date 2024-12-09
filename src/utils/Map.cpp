@@ -29,7 +29,7 @@ std::array<std::array<std::uint8_t, 30>, 18> lvl1 {{
 namespace Platformer
 {
 
-Map::Map()
+void Map::init()
 {
     dirt  = TextureManager::LoadTexture("res/images/dirt.png");
     grass = TextureManager::LoadTexture("res/images/grass.png");

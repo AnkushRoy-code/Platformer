@@ -4,22 +4,54 @@ include(FetchContent)
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-# Entt Fetch
+set(FETCHCONTENT_QUIET FALSE)
+
+# If you are wondering why I do not use the Git url method for FetchContent. It is because the repos are sometimes really big and can contain stuff we do not need, for example the Dear ImGui repo is of 200mb and the .git folder is of 170mb!
+
+# SDL -- Please do not compile this, have a heart for you...
+FetchContent_Declare(
+    SDL2
+    URL https://github.com/libsdl-org/SDL/releases/download/release-2.30.10/SDL2-2.30.10.zip
+    URL_HASH SHA256=14b06b30d3400953875e73b0c4771cad1483488a1ef816803610f22b32300ce8
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    FIND_PACKAGE_ARGS
+)
+
+# Glew Fetch (OpenGL ExtensionLoader)
+FetchContent_Declare(
+    GLEW
+    URL https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip
+    URL_HASH SHA256=a9046a913774395a095edcc0b0ac2d81c3aacca61787b39839b941e9be14e0d4
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    FIND_PACKAGE_ARGS
+)
+
+# GLM (OpenGL Mathematics)
+FetchContent_Declare(
+	glm
+    URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
+    URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    FIND_PACKAGE_ARGS
+)
+
+# Entt Fetch (ECS - Entity Component System)
 FetchContent_Declare(
     EnTT
     URL https://github.com/skypjack/entt/archive/refs/tags/v3.14.0.zip
     URL_HASH SHA256=3c3d8014294bf1918e5e1aae537dc823f68964fa3c3dec99d10fa22e5d63a6fe
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-FetchContent_MakeAvailable(EnTT)
 
+# box2d Fetch (Physics)
 FetchContent_Declare(
-    GLEW
-    URL https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip
-    URL_HASH SHA256=a9046a913774395a095edcc0b0ac2d81c3aacca61787b39839b941e9be14e0d4
+    box2d
+    URL https://github.com/erincatto/box2d/archive/refs/tags/v3.0.0.zip
+    URL_HASH SHA256=c2983a30a95037c46c19e42f398de6bc375d6ae87f30e0d0bbabb059ec60f8c0
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-FetchContent_MakeAvailable(GLEW)
+
+FetchContent_MakeAvailable(SDL2 GLEW glm EnTT box2d)
 
 add_library(PlatformerLib
     Platformer/eventHandler.cpp
@@ -33,12 +65,19 @@ add_library(PlatformerLib
     utils/TextureManager.cpp
     utils/Time.cpp
 )
+
 target_include_directories(PlatformerLib PUBLIC
-    ${entt_SOURCE_DIR}/src
+    # Dependencies
     ${SDL2_INCLUDE_DIRS}
+
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIRS}
-    # ${SDL2_IMAGE_INCLUDE_DIRS}
+    ${glm_INCLUDE_DIRS}
+
+    ${entt_SOURCE_DIR}
+    ${Box2D_INCLUDE_DIRS}
+
+    # My stuff
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/lib
 )
@@ -49,8 +88,10 @@ target_link_libraries(PlatformerLib PUBLIC
     OpenGL::GL
     OpenGL::OpenGL
     OpenGL::GLU
+    glm::glm
     GLEW
     EnTT
+    box2d
 )
 
 add_executable(PlatformerExe main.cpp)
