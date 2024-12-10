@@ -52,6 +52,20 @@ void Map::loadMap(const std::array<std::array<std::uint8_t, TILESET_WIDTH>, TILE
 
 void Map::drawMap()
 {
+    // Co-ordinate system is different for this game is like this:
+    //  (0, max)         (max, max)
+    //      . _______________ .
+    //      | \               |
+    //      |    \            |
+    //      |       \         |
+    //      |          \      |
+    //      |             \   |
+    //      |               \ |
+    //      . _______________ .
+    //   (0, 0)           (max, 0)  
+    //
+    //IDK this info might help
+    
     int type {};
     for (int row = 0; row < TILESET_HEIGHT; row++)
     {
@@ -60,7 +74,7 @@ void Map::drawMap()
             type = map[row][column];
 
             rect.x = column;
-            rect.y = row;
+            rect.y = TILESET_HEIGHT - row - 1; // Because co-ordinate system top is max and bottom is 0
             rect.w = 1;
             rect.h = 1;
 

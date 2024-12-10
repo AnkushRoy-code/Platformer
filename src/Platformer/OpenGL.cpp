@@ -27,7 +27,7 @@ void OpenGL::init()
     glDisable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, Width, Height, 0);
+    gluOrtho2D(0, Width, 0, Height);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

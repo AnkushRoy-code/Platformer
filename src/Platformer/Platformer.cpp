@@ -51,7 +51,8 @@ void Game::init()
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
 
-    Registry.emplace<Position>(PlayerEntity, 10.0f, 10.0f);
+    Registry.emplace<Position>(PlayerEntity, 10.0f,
+                               10.0f);  // doesn't matter will change soon
     Registry.emplace<Sprite>(PlayerEntity, "res/images/enemy.png", 1, 1);
 
     // Utils
@@ -61,14 +62,18 @@ void Game::init()
 
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type      = b2_dynamicBody;
-    bodyDef.position  = (b2Vec2) {0.0f, 4.0f};
-    bodyId   = b2CreateBody(Physics::worldId, &bodyDef);
+    bodyDef.position  = (b2Vec2) {5.0f, 4.0f};
+    bodyId            = b2CreateBody(Physics::worldId, &bodyDef);
+    b2Body_SetFixedRotation(bodyId, true);
 
-    b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
+    b2Polygon dynamicBox = b2MakeBox(20.0f / 32.0f, 28.0f / 32.0f);
     b2ShapeDef shapeDef  = b2DefaultShapeDef();
     shapeDef.density     = 1.0f;
     shapeDef.friction    = 0.3f;
+    shapeDef.density     = 2;
+
     b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+    b2Body_ApplyMassFromShapes(bodyId);
 
     mIsRunning = true;
     printDependencyVersions();
@@ -76,7 +81,7 @@ void Game::init()
 
 void Game::handleEvents()
 {
-    Input::handleInputs(mIsRunning);
+    Input::handleInputs(mIsRunning, bodyId);
 }
 
 void Game::update()
@@ -98,6 +103,8 @@ void Game::render()
 
         pos.x = b2Body_GetPosition(bodyId).x;
         pos.y = b2Body_GetPosition(bodyId).y;
+
+        // printf("%4.2f %4.2f\n", pos.x, pos.y );
 
         TextureManager::Draw(
             sprite.textureID,
