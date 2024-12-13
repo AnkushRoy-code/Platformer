@@ -12,9 +12,9 @@ void OpenGL::init()
 {
     glClearColor(30 / 255.0f, 150 / 255.0f, 100 / 255.0f, 1.0f);
 
-    constexpr auto scale  = 1.3333;
-    constexpr auto Width  = TILESET_WIDTH * TILESET_SIZE * scale;
-    constexpr auto Height = TILESET_HEIGHT * TILESET_SIZE * scale;
+    auto scale  = Window::WindowScale;
+    auto Width  = TILESET_WIDTH * TILESET_SIZE * scale;
+    auto Height = TILESET_HEIGHT * TILESET_SIZE * scale;
 
     glViewport(0, 0, Width, Height);
 
@@ -34,7 +34,6 @@ void OpenGL::init()
 
     double f = Window::WindowScale * TILESET_SIZE;
     glScalef(f, f, f);
-
 }
 
 void OpenGL::close() {}

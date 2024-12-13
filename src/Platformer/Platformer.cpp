@@ -1,6 +1,7 @@
 #include "Platformer/Platformer.h"
 
 #include "Platformer/OpenGL.h"
+#include "Platformer/keyState.h"
 #include "Platformer/window.h"
 #include "Platformer/eventHandler.h"
 #include "Platformer/Physics.h"
@@ -87,6 +88,13 @@ void Game::handleEvents()
 void Game::update()
 {
     Physics::update();
+
+    if (KeyState::isKeyPressed(KeyState::RIGHT)) {
+        std::cout << "Helo, this works\n";
+    }
+    if (KeyState::isKeyPressed(KeyState::L_MOUSEBUTTON)) {
+        std::cout << "Helo, this works too!\n";
+    }
 }
 
 void Game::render()

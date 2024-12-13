@@ -45,8 +45,8 @@ FetchContent_Declare(
 # box2d Fetch (Physics)
 FetchContent_Declare(
     box2d
-    URL https://github.com/erincatto/box2d/archive/refs/tags/v3.0.0.zip
-    URL_HASH SHA256=c2983a30a95037c46c19e42f398de6bc375d6ae87f30e0d0bbabb059ec60f8c0
+    URL https://github.com/erincatto/box2d/archive/f0763aca7d4dfa8f1c19c2c4a9e66fa6e93ea32e.zip
+    URL_HASH SHA256=87b5c2006ce45bf3621cba25db62595d44e9bb4d07bac0f35d06ec073dc75cf0
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
@@ -58,6 +58,7 @@ add_library(PlatformerLib
     Platformer/window.cpp
     Platformer/OpenGL.cpp
     Platformer/Physics.cpp
+    Platformer/keyState.cpp
 
     utils/Component.cpp
     # utils/GameObject.cpp
