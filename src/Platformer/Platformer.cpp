@@ -1,7 +1,7 @@
 #include "Platformer/Platformer.h"
 
 #include "Platformer/OpenGL.h"
-#include "Platformer/keyState.h"
+#include "Platformer/Player/Player.h"
 #include "Platformer/window.h"
 #include "Platformer/eventHandler.h"
 #include "Platformer/Physics.h"
@@ -18,8 +18,8 @@
 #include <box2d/box2d.h>
 #include <iostream>
 
-const auto M2P = 120;
-const auto P2M = 1 / M2P;
+// const auto M2P = 120;
+// const auto P2M = 1 / M2P;
 
 namespace Platformer
 {
@@ -46,7 +46,6 @@ void Game::run()
 }
 
 void printDependencyVersions();  // Forward declaration
-b2BodyId bodyId;
 void Game::init()
 {
     Window::init("Platformer");  // Window should init first
@@ -54,27 +53,15 @@ void Game::init()
 
     Registry.emplace<Position>(PlayerEntity, 10.0f,
                                10.0f);  // doesn't matter will change soon
-    Registry.emplace<Sprite>(PlayerEntity, "res/images/enemy.png", 1, 1);
+    Registry.emplace<Sprite>(PlayerEntity, "res/images/flatColour.png", 1, 1);
 
     // Utils
-    mMap.init();
     Time::init();
     Physics::init();
 
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type      = b2_dynamicBody;
-    bodyDef.position  = (b2Vec2) {5.0f, 4.0f};
-    bodyId            = b2CreateBody(Physics::worldId, &bodyDef);
-    b2Body_SetFixedRotation(bodyId, true);
+    mMap.init(); // Should Be initialised after Physics because it has physics tiles
 
-    b2Polygon dynamicBox = b2MakeBox(20.0f / 32.0f, 28.0f / 32.0f);
-    b2ShapeDef shapeDef  = b2DefaultShapeDef();
-    shapeDef.density     = 1.0f;
-    shapeDef.friction    = 0.3f;
-    shapeDef.density     = 2;
-
-    b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
-    b2Body_ApplyMassFromShapes(bodyId);
+    Player::init(); // Also is using physics
 
     mIsRunning = true;
     printDependencyVersions();
@@ -82,19 +69,13 @@ void Game::init()
 
 void Game::handleEvents()
 {
-    Input::handleInputs(mIsRunning, bodyId);
+    Input::handleInputs(mIsRunning);
 }
 
 void Game::update()
 {
     Physics::update();
-
-    if (KeyState::isKeyPressed(KeyState::RIGHT)) {
-        std::cout << "Helo, this works\n";
-    }
-    if (KeyState::isKeyPressed(KeyState::L_MOUSEBUTTON)) {
-        std::cout << "Helo, this works too!\n";
-    }
+    Player::update();
 }
 
 void Game::render()
@@ -109,14 +90,14 @@ void Game::render()
         auto &pos    = view.get<Position>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
-        pos.x = b2Body_GetPosition(bodyId).x;
-        pos.y = b2Body_GetPosition(bodyId).y;
+        pos.x = b2Body_GetPosition(Player::playerBody).x;
+        pos.y = b2Body_GetPosition(Player::playerBody).y;
 
         // printf("%4.2f %4.2f\n", pos.x, pos.y );
 
         TextureManager::Draw(
             sprite.textureID,
-            SDL_FRect {pos.x, pos.y, sprite.width, sprite.height});
+            SDL_FRect {pos.x, pos.y + 0.5f, sprite.width, sprite.height});
     }
 
     SDL_GL_SwapWindow(Window::window);

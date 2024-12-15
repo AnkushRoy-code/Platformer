@@ -1,4 +1,5 @@
 #include "Platformer/Physics.h"
+#include "box2d/math_functions.h"
 
 namespace Platformer
 {
@@ -23,7 +24,7 @@ void Physics::init()
     worldDef.gravity    = (b2Vec2) {0.0f, -9.807f};
     worldId             = b2CreateWorld(&worldDef);
 
-    initGround();
+    // initGround();
 }
 
 void Physics::update()

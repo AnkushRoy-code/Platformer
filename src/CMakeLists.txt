@@ -60,7 +60,10 @@ add_library(PlatformerLib
     Platformer/Physics.cpp
     Platformer/keyState.cpp
 
+    Platformer/Player/Player.cpp
+
     utils/Component.cpp
+    utils/PhysicsMap.cpp
     # utils/GameObject.cpp
     utils/Map.cpp
     utils/TextureManager.cpp

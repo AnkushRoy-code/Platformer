@@ -1,3 +1,4 @@
+#include "utils/PhysicsMap.h"
 #include "utils/TextureManager.h"
 #include "utils/constants.h"
 #include <iostream>
@@ -17,9 +18,9 @@ std::array<std::array<std::uint8_t, Platformer::TILESET_WIDTH>, Platformer::TILE
     { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 1, },
     { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
     { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, },
-    { 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
+    { 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
-    { 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
     { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, },
     { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, },
     { 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, }
@@ -43,9 +44,11 @@ void Map::init()
 
     // Temporary
     loadMap(lvl1);
+    PhysicsMap::init(lvl1);
 }
 
-void Map::loadMap(const std::array<std::array<std::uint8_t, TILESET_WIDTH>, TILESET_HEIGHT> &arr)
+void Map::loadMap(const std::array<std::array<std::uint8_t, TILESET_WIDTH>,
+                                   TILESET_HEIGHT> &arr)
 {
     map = arr;
 }
@@ -62,10 +65,10 @@ void Map::drawMap()
     //      |             \   |
     //      |               \ |
     //      . _______________ .
-    //   (0, 0)           (max, 0)  
+    //   (0, 0)           (max, 0)
     //
-    //IDK this info might help
-    
+    // IDK this info might help
+
     int type {};
     for (int row = 0; row < TILESET_HEIGHT; row++)
     {
@@ -74,7 +77,9 @@ void Map::drawMap()
             type = map[row][column];
 
             rect.x = column;
-            rect.y = TILESET_HEIGHT - row - 1; // Because co-ordinate system top is max and bottom is 0
+            rect.y =
+                TILESET_HEIGHT - row
+                - 1;  // Because co-ordinate system top is max and bottom is 0
             rect.w = 1;
             rect.h = 1;
 

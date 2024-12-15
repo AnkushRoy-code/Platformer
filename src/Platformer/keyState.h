@@ -17,7 +17,7 @@ enum keyCodes
     M_MOUSEBUTTON,
 };
 
-extern std::bitset<256> keyState;
+extern std::bitset<7> keyState; // If you change the size of this bitset here don't forget to change it in keyState.cpp too
 
 void keyPress(int keyCode);
 void keyRelease(int keyCode);

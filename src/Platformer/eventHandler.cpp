@@ -1,8 +1,6 @@
 #include "eventHandler.h"
 
 #include <SDL.h>
-#include <SDL_events.h>
-#include <SDL_mouse.h>
 #include <box2d/box2d.h>
 #include <functional>
 
@@ -11,7 +9,7 @@
 namespace Platformer
 {
 
-void Input::handleInputs(bool &isRunning, b2BodyId playerId)
+void Input::handleInputs(bool &isRunning)
 {
     SDL_Event event;
 

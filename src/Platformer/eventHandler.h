@@ -9,7 +9,7 @@ namespace Platformer
 class Input
 {
 public:
-    static void handleInputs(bool &isRunning, b2BodyId playerId);
+    static void handleInputs(bool &isRunning);
 private:
     static void changeKeyState(const std::function<void(int)> &function, const SDL_Event &event);
     static void changeCursorState(const std::function<void(int)> &function, const SDL_Event &event);
