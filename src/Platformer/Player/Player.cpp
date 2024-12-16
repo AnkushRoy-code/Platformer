@@ -2,9 +2,8 @@
 #include "Platformer/Physics.h"
 #include "Platformer/keyState.h"
 #include "box2d/collision.h"
-#include "box2d/math_functions.h"
-#include "box2d/types.h"
 #include <box2d/box2d.h>
+#include <iostream>
 
 namespace Platformer
 {
@@ -13,61 +12,64 @@ b2BodyId Player::playerBody {};
 
 void Player::init()
 {
-    b2BodyDef bodyDef     = b2DefaultBodyDef();
-    bodyDef.type          = b2_dynamicBody;
-    bodyDef.position      = (b2Vec2) {5.0f, 4.0f};
-    bodyDef.fixedRotation = true;
-    playerBody            = b2CreateBody(Physics::worldId, &bodyDef);
+    b2BodyDef playerBodyDef     = b2DefaultBodyDef();
+    playerBodyDef.type          = b2_dynamicBody;
+    playerBodyDef.position      = (b2Vec2) {5.0f, 4.0f};
+    playerBodyDef.fixedRotation = true;
+    playerBody = b2CreateBody(Physics::worldId, &playerBodyDef);
 
-    b2Polygon dynamicBox = b2MakeRoundedBox(0.4, 0.4, 0.1);
-    b2ShapeDef shapeDef  = b2DefaultShapeDef();
-    shapeDef.density     = 1.0f;
-    shapeDef.friction    = 0.3f;
-    b2CreatePolygonShape(playerBody, &shapeDef, &dynamicBox);
+    b2Polygon playerBodyBox           = b2MakeRoundedBox(0.4, 0.4, 0.1);
+    b2ShapeDef playerShapeDef         = b2DefaultShapeDef();
+    playerShapeDef.density            = 1.0f;
+    playerShapeDef.friction           = 0.1f;
+    playerShapeDef.enableSensorEvents = true;
+    b2CreatePolygonShape(playerBody, &playerShapeDef, &playerBodyBox);
 
-    // // Foot sensor
-    // b2Vec2 bodyPos          = b2Body_GetLocalCenterOfMass(playerBody);
-    // b2Polygon footSensorBox = b2MakeOffsetBox(
-    //     0.1f, 0.1f, b2Vec2 {bodyPos.x, bodyPos.y - 0.9f}, b2Rot {0.f, 0.f});
-    // b2ShapeDef footSensorShape         = b2DefaultShapeDef();
-    // footSensorShape.isSensor           = true;
-    // footSensorShape.enableSensorEvents = true;
-    // b2CreatePolygonShape(playerBody, &footSensorShape, &footSensorBox);
+    // Foot sensor
+    b2Polygon footSensorBox =
+        b2MakeOffsetBox(0.49f, 0.05f, {0, -0.9f}, b2Rot {1.f, 0.f});
+    b2ShapeDef footSensorShape = b2DefaultShapeDef();
+    footSensorShape.isSensor   = true;
+    footSensorId =
+        b2CreatePolygonShape(playerBody, &footSensorShape, &footSensorBox);
 }
 
 void Player::update()
 {
-    using namespace Platformer::KeyState;
+    int groundContactCount      = 0;
+    b2SensorEvents sensorEvents = b2World_GetSensorEvents(Physics::worldId);
 
-    // using linearVel
-    /* switch (keyState.to_ulong())
-
-    b2Vec2 vel = b2Body_GetLinearVelocity(playerBody);
+    for (int i = 0; i < sensorEvents.beginCount; ++i)
     {
-        case (1 << LEFT):
-            vel.x = b2MaxFloat(vel.x - 0.1f, -5.0f);
-            b2Body_SetLinearVelocity(playerBody, vel);
-            break;
+        const b2SensorBeginTouchEvent *event = &sensorEvents.beginEvents[i];
+        if (B2_ID_EQUALS(event->sensorShapeId, footSensorId))
+        {
+            groundContactCount++;
+        }
+    }
 
-        case (1 << RIGHT):
-            vel.x = b2MinFloat(vel.x + 0.1f, 5.0f);
-            b2Body_SetLinearVelocity(playerBody, vel);
-            break;
+    for (int i = 0; i < sensorEvents.endCount; ++i)
+    {
+        const b2SensorEndTouchEvent *event = &sensorEvents.endEvents[i];
+        if (B2_ID_EQUALS(event->sensorShapeId, footSensorId))
+        {
+            groundContactCount--;
+        }
+    }
+    bool isPlayerOnGround = (groundContactCount > 0);
+    bool isPlayerOnAir    = (groundContactCount < 0);
 
-        case (1 << SHIFT):
-            vel.x *= 0.98;
-            b2Body_SetLinearVelocity(playerBody, vel);
-            break;
+    if (isPlayerOnGround)
+    {
+        inAir = false;
+        doubleJumpAble = true;
+    }
+    if (isPlayerOnAir)
+    {
+        inAir = true;
+    }
 
-        case (1 << SPACE):
-            b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {vel.x, 1},
-                                              true);
-            break;
-        default:
-            break;
-    } */
-
-    // Using Force
+    using namespace Platformer::KeyState;
 
     b2Vec2 vel     = b2Body_GetLinearVelocity(playerBody);
     b2Vec2 gravity = b2World_GetGravity(Physics::worldId);
@@ -94,33 +96,25 @@ void Player::update()
             break;
 
         case (1 << SPACE):
-            b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7}, true);
+            if (!inAir)
+            {
+                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7},
+                                                  true);
+            }
+            else
+            {
+                if (doubleJumpAble)
+                {
+                    b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7},
+                                                      true);
+                    doubleJumpAble = false;
+                }
+            }
             keyRelease(SPACE);
-
             break;
         default:
             break;
     }
-
 }
-
-/*
- // using lookup table
-std::array<std::function<void()>, 7> keyActions = {
-    []() { std::cout << "SPACE pressed\n"; },
-    []() { std::cout << "RIGHT pressed\n"; },
-    []() { std::cout << "LEFT pressed\n"; },
-    []() { std::cout << "SHIFT pressed\n"; },
-    []() { std::cout << "R_MOUSEBUTTON pressed\n"; },
-    []() { std::cout << "L_MOUSEBUTTON pressed\n"; },
-    []() { std::cout << "M_MOUSEBUTTON pressed\n"; },
-};
-
-void processKey(int key) {
-    if (keyState.isKeypressed(key)) {
-        keyActions[key]();
-    }
-}
-*/
 
 }  // namespace Platformer

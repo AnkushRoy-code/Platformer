@@ -5,8 +5,6 @@ find_package(OpenGL REQUIRED)
 
 set(FETCHCONTENT_QUIET FALSE)
 
-# If you are wondering why I do not use the Git url method for FetchContent. It is because the repos are sometimes really big and can contain stuff we do not need, for example the Dear ImGui repo is of 200mb and the .git folder is of 170mb!
-
 # SDL -- Please do not compile this, have a heart for you...
 FetchContent_Declare(
     SDL2
@@ -16,14 +14,21 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS
 )
 
-# Glew Fetch (OpenGL ExtensionLoader)
 FetchContent_Declare(
-    GLEW
-    URL https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip
-    URL_HASH SHA256=a9046a913774395a095edcc0b0ac2d81c3aacca61787b39839b941e9be14e0d4
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    FIND_PACKAGE_ARGS
+  glew
+  GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+  GIT_TAG        origin/master
+  GIT_SHALLOW    TRUE
+  GIT_PROGRESS   TRUE
 )
+
+FetchContent_GetProperties(glew)
+
+if(NOT glew_POPULATED)
+  FetchContent_Populate(glew)
+
+  add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
 
 # GLM (OpenGL Mathematics)
 FetchContent_Declare(
@@ -50,7 +55,7 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-FetchContent_MakeAvailable(SDL2 GLEW glm EnTT box2d)
+FetchContent_MakeAvailable(SDL2 glew glm EnTT box2d)
 
 add_library(PlatformerLib
     Platformer/eventHandler.cpp
@@ -75,7 +80,7 @@ target_include_directories(PlatformerLib PUBLIC
     ${SDL2_INCLUDE_DIRS}
 
     ${OPENGL_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIRS}
+    ${glew_SOURCE_DIR}/include
     ${glm_INCLUDE_DIRS}
 
     ${entt_SOURCE_DIR}
@@ -90,10 +95,10 @@ target_link_libraries(PlatformerLib PUBLIC
     SDL2::SDL2
     SDL2::SDL2main
     OpenGL::GL
-    OpenGL::OpenGL
     OpenGL::GLU
+    OpenGL::OpenGL
     glm::glm
-    GLEW
+    libglew_shared
     EnTT
     box2d
 )

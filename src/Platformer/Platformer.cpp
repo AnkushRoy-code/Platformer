@@ -61,7 +61,7 @@ void Game::init()
 
     mMap.init(); // Should Be initialised after Physics because it has physics tiles
 
-    Player::init(); // Also is using physics
+    mPlayer.init(); // Also is using physics
 
     mIsRunning = true;
     printDependencyVersions();
@@ -75,7 +75,7 @@ void Game::handleEvents()
 void Game::update()
 {
     Physics::update();
-    Player::update();
+    mPlayer.update();
 }
 
 void Game::render()
@@ -109,6 +109,7 @@ void Game::cleanup()
     Window::close();  // Window should close after opengl
 
     Registry.destroy(PlayerEntity);
+    mPlayer.close();
     Physics::close();
 }
 
@@ -156,12 +157,6 @@ void printDependencyVersions()
         reinterpret_cast<const char *>(glGetString(GL_VERSION));
     std::cout << std::left << std::setw(20) << "OpenGL::GL"
               << (glVersion ? glVersion : "Unknown") << std::endl;
-
-    // OpenGL GLU Version
-    const char *gluVersion =
-        reinterpret_cast<const char *>(gluGetString(GLU_VERSION));
-    std::cout << std::left << std::setw(20) << "OpenGL::GLU"
-              << (gluVersion ? gluVersion : "Unknown") << std::endl;
 
     // GLM Version
     std::cout << std::left << std::setw(20) << "glm::glm" << GLM_VERSION_MAJOR

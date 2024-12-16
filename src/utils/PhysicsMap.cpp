@@ -30,15 +30,18 @@ void Platformer::PhysicsMap::init(
             b2BodyDef staticBody = b2DefaultBodyDef();
             staticBody.position  = (b2Vec2) {rect.x, rect.y - 0.5f};
 
-            b2BodyId staticBodyId   = b2CreateBody(Physics::worldId, &staticBody);
+            b2BodyId staticBodyId = b2CreateBody(Physics::worldId, &staticBody);
             // b2Polygon staticBodyBox = b2MakeBox(rect.w / 2, rect.h / 2);
             b2Polygon staticBodyBox = b2MakeBox(rect.w / 2, rect.h / 2);
 
-            b2ShapeDef staticBodyShapeDef = b2DefaultShapeDef();
-            b2CreatePolygonShape(staticBodyId, &staticBodyShapeDef, &staticBodyBox);
+            b2ShapeDef staticBodyShapeDef         = b2DefaultShapeDef();
+            staticBodyShapeDef.enableSensorEvents = true;
+            b2CreatePolygonShape(staticBodyId, &staticBodyShapeDef,
+                                 &staticBodyBox);
 
             // b2Polygon staticBodyBox =
-            //     b2MakeRoundedBox((rect.w / 2) - 0.1, (rect.h / 2) - 0.1, 0.1);
+            //     b2MakeRoundedBox((rect.w / 2) - 0.1, (rect.h / 2) - 0.1,
+            //     0.1);
 
             // b2ShapeDef staticBodyShapeDef = b2DefaultShapeDef();
             // staticBodyShapeDef.friction = 0.1;

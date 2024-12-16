@@ -9,13 +9,18 @@ class Player
 {
 public:
     static b2BodyId playerBody;
-    static void init();
-    static void update();
+    void init();
+    void update();
 
-    static void close()
+    void close()
     {
         b2DestroyBody(playerBody);
     }
+
+private:
+    bool doubleJumpAble {false};
+    bool inAir {false};
+    b2ShapeId footSensorId {};
 };
 
 }  // namespace Platformer
