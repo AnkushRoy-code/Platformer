@@ -73,6 +73,8 @@ add_library(PlatformerLib
     utils/Map.cpp
     utils/TextureManager.cpp
     utils/Time.cpp
+
+    debugHelp/box2dDebugDraw.cpp
 )
 
 target_include_directories(PlatformerLib PUBLIC

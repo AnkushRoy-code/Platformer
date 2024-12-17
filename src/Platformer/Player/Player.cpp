@@ -14,11 +14,11 @@ void Player::init()
 {
     b2BodyDef playerBodyDef     = b2DefaultBodyDef();
     playerBodyDef.type          = b2_dynamicBody;
-    playerBodyDef.position      = (b2Vec2) {5.0f, 4.0f};
+    playerBodyDef.position      = (b2Vec2) {5.0f, 8.0f};
     playerBodyDef.fixedRotation = true;
     playerBody = b2CreateBody(Physics::worldId, &playerBodyDef);
 
-    b2Polygon playerBodyBox           = b2MakeRoundedBox(0.4, 0.4, 0.1);
+    b2Polygon playerBodyBox           = b2MakeBox(0.5, 0.5);
     b2ShapeDef playerShapeDef         = b2DefaultShapeDef();
     playerShapeDef.density            = 1.0f;
     playerShapeDef.friction           = 0.1f;

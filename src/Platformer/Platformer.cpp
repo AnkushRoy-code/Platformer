@@ -6,10 +6,13 @@
 #include "Platformer/eventHandler.h"
 #include "Platformer/Physics.h"
 
+#include "box2d/types.h"
 #include "utils/Map.h"
 #include "utils/Component.h"
 #include "utils/TextureManager.h"
 #include "utils/Time.h"
+
+#include "debugHelp/box2dDebugDraw.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -59,12 +62,26 @@ void Game::init()
     Time::init();
     Physics::init();
 
-    mMap.init(); // Should Be initialised after Physics because it has physics tiles
+    mMap.init();  // Should Be initialised after Physics because it has physics
+                  // tiles
 
-    mPlayer.init(); // Also is using physics
+    mPlayer.init();  // Also is using physics
 
     mIsRunning = true;
     printDependencyVersions();
+
+    Debug::g_draw.m_debugDraw.drawShapes           = true;
+    Debug::g_draw.m_debugDraw.drawJoints           = true;
+    Debug::g_draw.m_debugDraw.drawJointExtras      = true;
+    Debug::g_draw.m_debugDraw.drawAABBs            = true;
+    Debug::g_draw.m_debugDraw.drawMass             = true;
+    Debug::g_draw.m_debugDraw.drawContacts         = true;
+    Debug::g_draw.m_debugDraw.drawGraphColors      = true;
+    Debug::g_draw.m_debugDraw.drawContactNormals   = true;
+    Debug::g_draw.m_debugDraw.drawContactImpulses  = true;
+    Debug::g_draw.m_debugDraw.drawFrictionImpulses = true;
+    
+    Debug::g_draw.Create();
 }
 
 void Game::handleEvents()
@@ -97,8 +114,10 @@ void Game::render()
 
         TextureManager::Draw(
             sprite.textureID,
-            SDL_FRect {pos.x, pos.y + 0.5f, sprite.width, sprite.height});
+            SDL_FRect {pos.x - 0.5f, pos.y - 0.5f, sprite.width, sprite.height});
     }
+    b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
+    Debug::g_draw.Flush();
 
     SDL_GL_SwapWindow(Window::window);
 }
@@ -110,7 +129,10 @@ void Game::cleanup()
 
     Registry.destroy(PlayerEntity);
     mPlayer.close();
+
+    Debug::g_draw.Destroy();
     Physics::close();
+
 }
 
 //
