@@ -21,7 +21,6 @@ extern std::bitset<7> keyState; // If you change the size of this bitset here do
 
 void keyPress(int keyCode);
 void keyRelease(int keyCode);
-[[nodiscard]] bool isKeyPressed(int keyCode);
 
 }  // namespace Platformer::KeyState
 

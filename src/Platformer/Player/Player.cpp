@@ -3,7 +3,6 @@
 #include "Platformer/keyState.h"
 #include "box2d/collision.h"
 #include <box2d/box2d.h>
-#include <iostream>
 
 namespace Platformer
 {
@@ -14,10 +13,11 @@ void Player::init()
 {
     b2BodyDef playerBodyDef     = b2DefaultBodyDef();
     playerBodyDef.type          = b2_dynamicBody;
-    playerBodyDef.position      = (b2Vec2) {5.0f, 8.0f};
+    playerBodyDef.position      = (b2Vec2) {7.0f, 8.0f};
     playerBodyDef.fixedRotation = true;
     playerBody = b2CreateBody(Physics::worldId, &playerBodyDef);
 
+    // Player body
     b2Polygon playerBodyBox           = b2MakeBox(0.5, 0.5);
     b2ShapeDef playerShapeDef         = b2DefaultShapeDef();
     playerShapeDef.density            = 1.0f;
@@ -27,7 +27,7 @@ void Player::init()
 
     // Foot sensor
     b2Polygon footSensorBox =
-        b2MakeOffsetBox(0.49f, 0.05f, {0, -0.9f}, b2Rot {1.f, 0.f});
+        b2MakeOffsetBox(0.49f, 0.1f, {0, -0.9f}, b2Rot {1.f, 0.f});
     b2ShapeDef footSensorShape = b2DefaultShapeDef();
     footSensorShape.isSensor   = true;
     footSensorId =
@@ -61,7 +61,7 @@ void Player::update()
 
     if (isPlayerOnGround)
     {
-        inAir = false;
+        inAir          = false;
         doubleJumpAble = true;
     }
     if (isPlayerOnAir)
@@ -69,51 +69,83 @@ void Player::update()
         inAir = true;
     }
 
+    // Handling inputs
     using namespace Platformer::KeyState;
 
     b2Vec2 vel     = b2Body_GetLinearVelocity(playerBody);
     b2Vec2 gravity = b2World_GetGravity(Physics::worldId);
 
-    switch (keyState.to_ulong())
+    if (keyState[SHIFT])
     {
-        case (1 << LEFT):
+        if (keyState[LEFT] && !keyState[RIGHT])
+        {
+            if (vel.x > -1)
+            {
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-50, gravity.y},
+                                          true);
+            }
+            else
+            {
+                b2Body_ApplyForceToCenter(
+                    playerBody, b2Vec2 {vel.x * -10, gravity.y}, true);
+            }
+        }
+
+        else if (keyState[RIGHT] && !keyState[LEFT])
+        {
+            if (vel.x < 1)
+            {
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {50, gravity.y},
+                                          true);
+            }
+            else
+            {
+                b2Body_ApplyForceToCenter(
+                    playerBody, b2Vec2 {vel.x * -10, gravity.y}, true);
+            }
+        }
+        else
+        {
+            b2Body_ApplyForceToCenter(playerBody,
+                                      b2Vec2 {vel.x * -10, gravity.y}, true);
+        }
+    }
+    else
+    {
+
+        if (keyState[LEFT] && !keyState[RIGHT])
+        {
             if (vel.x > -5)
             {
                 b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-50, gravity.y},
                                           true);
             }
-            break;
+        }
 
-        case (1 << RIGHT):
+        if (keyState[RIGHT] && !keyState[LEFT])
+        {
             if (vel.x < 5)
+            {
                 b2Body_ApplyForceToCenter(playerBody, b2Vec2 {50, gravity.y},
                                           true);
-            break;
+            }
+        }
 
-        case (1 << SHIFT):
-            b2Body_ApplyForceToCenter(playerBody,
-                                      b2Vec2 {vel.x * -10, gravity.y}, true);
-            break;
-
-        case (1 << SPACE):
+        if (keyState[SPACE])
+        {
             if (!inAir)
             {
                 b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7},
                                                   true);
             }
-            else
+            else if (doubleJumpAble)
             {
-                if (doubleJumpAble)
-                {
-                    b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7},
-                                                      true);
-                    doubleJumpAble = false;
-                }
+                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 7},
+                                                  true);
+                doubleJumpAble = false;
             }
-            keyRelease(SPACE);
-            break;
-        default:
-            break;
+            keyRelease(SPACE);  // Reset key state after handling
+        }
     }
 }
 

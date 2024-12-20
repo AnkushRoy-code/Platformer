@@ -4,8 +4,8 @@
 #include "box2d/math_functions.h"
 #include "utils/constants.h"
 #include <algorithm>
-#include <iostream>
 #include <queue>
+#include <set>
 #include <unordered_map>
 #include <vector>
 
@@ -13,45 +13,14 @@ namespace Platformer
 {
 b2BodyId PhysicsMap::perimeterBodyId {};
 
-struct b2Vec2Hash
+bool vec2Equal(const b2Vec2 &a, const b2Vec2 &b)
 {
-    std::size_t operator()(const b2Vec2 &v) const
-    {
-        std::hash<float> hashFn;
-        return hashFn(v.x) ^ (hashFn(v.y) << 1);
-    }
-};
-
-b2Vec2 computeCentroid(const std::vector<b2Vec2>& points) {
-    float sumX = 0.0f, sumY = 0.0f;
-    for (const auto& point : points) {
-        sumX += point.x;
-        sumY += point.y;
-    }
-    return {sumX / points.size(), sumY / points.size()};
+    return a.x == b.x && a.y == b.y;
 }
 
-float calculateAngle(const b2Vec2& center, const b2Vec2& point) {
-    return std::atan2(point.y - center.y, point.x - center.x);
-}
-
-void sortPointsAntiClockwise(std::vector<b2Vec2>& points) {
-    b2Vec2 centroid = computeCentroid(points);
-
-    std::sort(points.begin(), points.end(), [&centroid](const b2Vec2& a, const b2Vec2& b) {
-        return calculateAngle(centroid, a) < calculateAngle(centroid, b);
-    });
-}
-
-std::vector<b2Vec2> invertY(const std::vector<b2Vec2> &points)
+bool vec2Less(const b2Vec2 &a, const b2Vec2 &b)
 {
-    std::vector<b2Vec2> tmp;
-    tmp.reserve(points.size());
-    for (auto i: points)
-    {
-        tmp.emplace_back(b2Vec2 {i.x, TILESET_HEIGHT - i.y});
-    }
-    return tmp;
+    return a.x < b.x || (a.x == b.x && a.y < b.y);
 }
 
 void Platformer::PhysicsMap::init(
@@ -62,34 +31,202 @@ void Platformer::PhysicsMap::init(
 
     auto clusters = findClusters(map);
 
-    for (size_t i = 0; i < clusters.size(); ++i)
-    {
-        std::cout << "Cluster " << i + 1 << ":\n";
-        for (const auto &point: clusters[i])
-        {
-            std::cout << "(" << point.x << ", " << point.y << ") ";
-        }
-        std::cout << '\n';
-    }
+    std::vector<Edge> Edges;
+    std::vector<b2Vec2> corners;
 
     for (auto points: clusters)
     {
+        // Due to the co-ordinate system we have to invert Y axis of points.
         points = invertY(points);
+
+        Edges.clear();
+        // From a single point detect 4 Edges.
+        Edges = findEdges(points);
+        // Remove all the edges that are appearing more than once. They are
+        // inner Edge. We don't need those
+        Edges = getUniqueEdges(Edges);  // Edge now has outer Edges only
+
+        // Why set? Faster lookup someone said.
+        // Why now? I learned it while in the middle of making it.
+        std::set<Edge> edgeSet(Edges.begin(), Edges.end());
+
+        // From a single point make 3 more points.
+        points = getSurroundingPoints(points);
+
+        corners.clear();
+        // From the points now. The points that occur odd number of times are
+        // the corner points.
+        corners = getOddDuplicates(points);
+
+        // Keep the corners we will need later.
+        auto ActualCorners = corners;
+
+        // With the corners and Edges we will make a polygon. We don't know if
+        // the points will be sorted clockwise or anitclockwise
+        corners = constructPolygon(edgeSet, corners[1]);
+
+        // constructPolygon function gives some useless points that are not
+        // corners and we don't need them. We kept track of ActualCorners
+        // earlier and will remove all the corners that are not actually
+        // corners without changing the arrangement.
+        removeNonCommonElements(corners, ActualCorners);
+
         b2ChainDef perimeterChainDef = b2DefaultChainDef();
         perimeterChainDef.isLoop     = true;
 
-        points = getSurroundingPoints(points);
-        points = getOddDuplicates(points);
-
-        sortPointsAntiClockwise(points);
-
-        perimeterChainDef.count  = points.size();
-        perimeterChainDef.points = points.data();
+        perimeterChainDef.count  = corners.size();
+        perimeterChainDef.points = corners.data();
 
         b2CreateChain(perimeterBodyId, &perimeterChainDef);
     }
 }
 
+void PhysicsMap::reversePolygon(std::vector<b2Vec2> &corners)
+{
+    int left  = 0;
+    int right = corners.size() - 1;
+    while (left < right)
+    {
+        b2Vec2 temp    = corners[left];
+        corners[left]  = corners[right];
+        corners[right] = temp;
+
+        left++;
+        right--;
+    }
+}
+
+void PhysicsMap::removeNonCommonElements(std::vector<b2Vec2> &vec1,
+                                         std::vector<b2Vec2> &vec2)
+{
+    std::set<b2Vec2, decltype(&vec2Less)> set2(vec2.begin(), vec2.end(),
+                                               vec2Less);
+
+    vec1.erase(std::remove_if(vec1.begin(), vec1.end(),
+                              [&set2](const b2Vec2 &v)
+                              {
+                                  return set2.find(v) == set2.end();
+                              }),
+               vec1.end());
+
+    std::set<b2Vec2, decltype(&vec2Less)> set1(vec1.begin(), vec1.end(),
+                                               vec2Less);
+
+    vec2.erase(std::remove_if(vec2.begin(), vec2.end(),
+                              [&set1](const b2Vec2 &v)
+                              {
+                                  return set1.find(v) == set1.end();
+                              }),
+               vec2.end());
+}
+
+std::vector<b2Vec2>
+    PhysicsMap::constructPolygon(const std::set<Edge> &outerEdges,
+                                 const b2Vec2 &startCorner)
+{
+    std::vector<b2Vec2> polygon;
+    b2Vec2 current = startCorner;
+
+    polygon.push_back(current);
+    std::set<Edge> visitedEdges;
+
+    while (true)
+    {
+        bool foundNextEdge = false;
+
+        for (const auto &edge: outerEdges)
+        {
+            if (visitedEdges.count(edge) > 0)
+                continue;  // Skip visited edges
+
+            b2Vec2 next;
+            if (vec2Equal(edge.a, current))
+            {
+                next = edge.b;
+            }
+            else if (vec2Equal(edge.b, current))
+            {
+                next = edge.a;
+            }
+            else
+            {
+                continue;
+            }
+
+            // Mark edge as visited
+            visitedEdges.insert(edge);
+
+            // Move to the next corner
+            current = next;
+            polygon.push_back(current);
+            foundNextEdge = true;
+            break;
+        }
+
+        if (!foundNextEdge || vec2Equal(current, startCorner))
+        {
+            break;  // Completed the loop or no valid edges
+        }
+    }
+
+    return polygon;
+}
+
+std::vector<b2Vec2> PhysicsMap::invertY(const std::vector<b2Vec2> &points)
+{
+    std::vector<b2Vec2> tmp;
+    tmp.reserve(points.size());
+    for (auto i: points)
+    {
+        tmp.emplace_back(b2Vec2 {i.x, TILESET_HEIGHT - i.y});
+    }
+    return tmp;
+}
+std::vector<Edge> PhysicsMap::getUniqueEdges(const std::vector<Edge> &edges)
+{
+    std::unordered_map<Edge, int, EdgeHash> edgeCount;
+    for (const Edge &edge: edges)
+    {
+        edgeCount[edge]++;
+    }
+
+    // Collect edges that appear only once
+    std::vector<Edge> uniqueEdges;
+    for (const auto &pair: edgeCount)
+    {
+        if (pair.second == 1)
+        {
+            uniqueEdges.push_back(pair.first);
+        }
+    }
+
+    return uniqueEdges;
+}
+
+std::vector<Edge> PhysicsMap::findEdges(const std::vector<b2Vec2> &points)
+{
+    std::vector<Edge> tmp;
+    for (auto point: points)
+    {
+        b2Vec2 p1 = {point.x, point.y};
+        b2Vec2 p2 = {point.x + 1, point.y};
+        tmp.emplace_back(Edge {p1, p2});  // Top-Edge
+
+        // p1 is same
+        p2 = {point.x, point.y - 1};
+        tmp.emplace_back(Edge {p1, p2});  // Left-Edge
+
+        p1 = {point.x + 1, point.y};
+        p2 = {point.x + 1, point.y - 1};
+        tmp.emplace_back(Edge {p1, p2});  // Right-Edge
+
+        p1 = {point.x, point.y - 1};
+        // p2 is same
+        tmp.emplace_back(Edge {p1, p2});  // Bottom-Edge
+    }
+
+    return tmp;
+}
 void PhysicsMap::initPerimeterBodyId()
 {
     b2BodyDef perimeterBodyDef = b2DefaultBodyDef();

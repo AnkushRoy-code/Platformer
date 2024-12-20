@@ -7,9 +7,57 @@
 #include <SDL_video.h>
 #include <array>
 #include <cstdint>
+#include <set>
 #include <vector>
+
 namespace Platformer
 {
+
+bool vec2Equal(const b2Vec2 &a, const b2Vec2 &b);
+bool vec2Less(const b2Vec2 &a, const b2Vec2 &b);
+
+struct Edge
+{
+    b2Vec2 a;
+    b2Vec2 b;
+
+    bool operator<(const Edge &other) const
+    {
+        if (vec2Less(a, other.a))
+        {
+            return true;
+        }
+        if (vec2Equal(a, other.a))
+        {
+            return vec2Less(b, other.b);
+        }
+        return false;
+    }
+
+    bool operator==(const Edge &other) const
+    {
+        return (vec2Equal(a, other.a) && vec2Equal(b, other.b))
+               || (vec2Equal(a, other.b) && vec2Equal(b, other.a));
+    }
+};
+
+struct b2Vec2Hash
+{
+    std::size_t operator()(const b2Vec2 &v) const
+    {
+        std::hash<float> hashFn;
+        return hashFn(v.x) ^ (hashFn(v.y) << 1);
+    }
+};
+
+struct EdgeHash
+{
+    std::size_t operator()(const Edge &edge) const
+    {
+        return std::hash<float>()(edge.a.x) ^ std::hash<float>()(edge.a.y)
+               ^ std::hash<float>()(edge.b.x) ^ std::hash<float>()(edge.b.y);
+    }
+};
 
 class PhysicsMap
 {
@@ -30,6 +78,20 @@ private:
         const std::array<std::array<std::uint8_t, WIDTH>, HEIGHT> &grid);
     static void initPerimeterBodyId();
 
+    static void removeNonCommonElements(std::vector<b2Vec2> &vec1,
+                                        std::vector<b2Vec2> &vec2);
+
+    static std::vector<Edge> getUniqueEdges(const std::vector<Edge> &edges);
+    static std::vector<Edge> findEdges(const std::vector<b2Vec2> &points);
+
+    static std::vector<b2Vec2> invertY(const std::vector<b2Vec2> &points);
+
+    static std::vector<b2Vec2>
+        constructPolygon(const std::set<Edge> &outerEdges,
+                         const b2Vec2 &startCorner);
+
+    static void reversePolygon(std::vector<b2Vec2> &corners);
+private:
     static b2BodyId perimeterBodyId;
 };
 
