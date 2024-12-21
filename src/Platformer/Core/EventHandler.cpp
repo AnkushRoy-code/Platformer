@@ -1,10 +1,10 @@
-#include "eventHandler.h"
+#include "Platformer/Core/EventHandler.h"
 
 #include <SDL.h>
 #include <box2d/box2d.h>
 #include <functional>
 
-#include "Platformer/keyState.h"
+#include "Platformer/Core/KeyState.h"
 
 namespace Platformer
 {

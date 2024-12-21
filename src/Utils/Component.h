@@ -3,7 +3,7 @@
 #ifndef INCLUDE_PLATFORMER_COMPONENT_H_
 #define INCLUDE_PLATFORMER_COMPONENT_H_
 
-#include "utils/TextureManager.h"
+#include "Utils/TextureManager.h"
 #include <SDL.h>
 #include <filesystem>
 

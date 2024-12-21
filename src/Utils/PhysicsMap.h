@@ -3,7 +3,7 @@
 
 #include "box2d/id.h"
 #include "box2d/math_functions.h"
-#include "utils/constants.h"
+#include "Utils/Constants.h"
 #include <SDL_video.h>
 #include <array>
 #include <cstdint>

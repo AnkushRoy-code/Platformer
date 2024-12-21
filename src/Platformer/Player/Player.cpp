@@ -1,6 +1,6 @@
 #include "Player.h"
-#include "Platformer/Physics.h"
-#include "Platformer/keyState.h"
+#include "Platformer/Physics/Physics.h"
+#include "Platformer/Core/KeyState.h"
 #include "box2d/collision.h"
 #include <box2d/box2d.h>
 

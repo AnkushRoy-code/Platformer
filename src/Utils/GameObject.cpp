@@ -1,7 +1,7 @@
 #include "GameObject.h"
 
-#include "Platformer/Platformer.h"
-#include "utils/TextureManager.h"
+#include "Platformer/Core/Platformer.h"
+#include "Utils/TextureManager.h"
 #include <SDL_render.h>
 #include <filesystem>
 

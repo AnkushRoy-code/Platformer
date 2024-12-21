@@ -1,8 +1,8 @@
-#include "utils/PhysicsMap.h"
-#include "utils/TextureManager.h"
-#include "utils/constants.h"
+#include "Utils/PhysicsMap.h"
+#include "Utils/TextureManager.h"
+#include "Utils/Constants.h"
 #include <iostream>
-#include <utils/Map.h>
+#include "Utils/Map.h"
 
 // clang-format off
 std::array<std::array<std::uint8_t, Platformer::TILESET_WIDTH>, Platformer::TILESET_HEIGHT> lvl1 {{

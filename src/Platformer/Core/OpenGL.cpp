@@ -1,7 +1,7 @@
 #include "OpenGL.h"
-#include "utils/TextureManager.h"
-#include "Platformer/window.h"
-#include "utils/constants.h"
+#include "Utils/TextureManager.h"
+#include "Platformer/Core/Window.h"
+#include "Utils/Constants.h"
 #include <GL/glu.h>
 #include <iostream>
 

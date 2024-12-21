@@ -1,10 +1,11 @@
 This will be my first platformer game. It will have features people take for granted like:
 
-- [ ] Controlable Character
+- [x] Controlable Character
 - [ ] Movements
-    - [ ] Run
-    - [ ] Walk
+    - [x] Run
+    - [x] Walk (Press Shift)
     - [ ] Crouch
+    - [x] Jump
 - [ ] Attacks
     - [ ] Mele
     - [ ] Dash
@@ -38,5 +39,7 @@ For Unix
 mkdir build
 cd build
 cmake .. -DCMAKE_CXX_COMPILER="/usr/bin/clang++" -DCMAKE_C_COMPILER="/usr/bin/clang" -DCMAKE_CXX_FLAGS="-Wall -O3 -ffast-math" -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTING="OFF"
+make
+./src/main/PlatformerExe
 ```
 

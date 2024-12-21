@@ -1,8 +1,8 @@
-#include "PhysicsMap.h"
-#include "Platformer/Physics.h"
+#include "Utils/PhysicsMap.h"
+#include "Platformer/Physics/Physics.h"
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
-#include "utils/constants.h"
+#include "Utils/Constants.h"
 #include <algorithm>
 #include <queue>
 #include <set>

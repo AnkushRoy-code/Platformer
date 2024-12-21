@@ -1,8 +1,7 @@
-#include "Platformer/window.h"
-#include "utils/constants.h"
+#include "Platformer/Core/Window.h"
+#include "Utils/Constants.h"
 
 #include <SDL.h>
-#include <iomanip>
 #include <string>
 #include <iostream>
 

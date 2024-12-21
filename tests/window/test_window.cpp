@@ -2,7 +2,7 @@
 #include <catch2/catch_all.hpp>
 #include <SDL.h>
 #include <string>
-#include "Platformer/window.h"
+#include "Platformer/Core/Window.h"
 
 using namespace Platformer;
 

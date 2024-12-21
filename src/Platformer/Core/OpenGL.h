@@ -2,7 +2,7 @@
 #define INCLUDE_PLATFORMER_OPENGL_H_
 
 // I spent wayy to long documenting this...IDK why
-#include "utils/TextureManager.h"
+
 namespace Platformer
 {
 class OpenGL

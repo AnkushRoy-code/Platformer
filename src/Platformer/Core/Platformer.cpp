@@ -1,16 +1,16 @@
-#include "Platformer/Platformer.h"
+#include "Platformer/Core/Platformer.h"
 
-#include "Platformer/OpenGL.h"
+#include "Platformer/Core/OpenGL.h"
 #include "Platformer/Player/Player.h"
-#include "Platformer/window.h"
-#include "Platformer/eventHandler.h"
-#include "Platformer/Physics.h"
+#include "Platformer/Core/Window.h"
+#include "Platformer/Core/EventHandler.h"
+#include "Platformer/Physics/Physics.h"
 
 #include "box2d/types.h"
-#include "utils/Map.h"
-#include "utils/Component.h"
-#include "utils/TextureManager.h"
-#include "utils/Time.h"
+#include "Utils/Map.h"
+#include "Utils/Component.h"
+#include "Utils/TextureManager.h"
+#include "Utils/Time.h"
 
 #include "debugHelp/box2dDebugDraw.h"
 

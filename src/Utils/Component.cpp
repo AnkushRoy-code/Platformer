@@ -1,5 +1,5 @@
-#include "Component.h"
-#include "utils/TextureManager.h"
+#include "Utils/Component.h"
+#include "Utils/TextureManager.h"
 
 namespace Platformer
 {

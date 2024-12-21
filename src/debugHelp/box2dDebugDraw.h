@@ -1,7 +1,7 @@
 #ifndef INCLUDE_DEBUGHELP_BOX2DDEBUGDRAW_H_
 #define INCLUDE_DEBUGHELP_BOX2DDEBUGDRAW_H_
 
-#include "box2d/box2d.h"  // Replace with your Box2D header
+#include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include <GL/gl.h>
 #include <cmath>
