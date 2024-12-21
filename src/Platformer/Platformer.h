@@ -1,10 +1,7 @@
-///
-/// Includes the Game Class
-///
-
 #ifndef INCLUDE_PLATFORMER_PLATFORMER_H_
 #define INCLUDE_PLATFORMER_PLATFORMER_H_
 
+#include "Platformer/Player/Player.h"
 #include "box2d/id.h"
 #include "entt/entity/fwd.hpp"
 #include "utils/Map.h"
@@ -36,6 +33,7 @@ private:
     void handleInput(const b2BodyId &bodyId);
 
 private:
+    Player mPlayer {};
     bool mIsRunning {};
     Map mMap {};
 };

@@ -1,14 +1,18 @@
 #include "Platformer/Platformer.h"
 
 #include "Platformer/OpenGL.h"
+#include "Platformer/Player/Player.h"
 #include "Platformer/window.h"
 #include "Platformer/eventHandler.h"
 #include "Platformer/Physics.h"
 
+#include "box2d/types.h"
 #include "utils/Map.h"
 #include "utils/Component.h"
 #include "utils/TextureManager.h"
 #include "utils/Time.h"
+
+#include "debugHelp/box2dDebugDraw.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,8 +21,8 @@
 #include <box2d/box2d.h>
 #include <iostream>
 
-const auto M2P = 120;
-const auto P2M = 1 / M2P;
+// const auto M2P = 120;
+// const auto P2M = 1 / M2P;
 
 namespace Platformer
 {
@@ -45,33 +49,39 @@ void Game::run()
 }
 
 void printDependencyVersions();  // Forward declaration
-b2BodyId bodyId;
 void Game::init()
 {
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
 
-    Registry.emplace<Position>(PlayerEntity, 10.0f, 10.0f);
-    Registry.emplace<Sprite>(PlayerEntity, "res/images/enemy.png", 1, 1);
+    Registry.emplace<Position>(PlayerEntity, 10.0f,
+                               10.0f);  // doesn't matter will change soon
+    Registry.emplace<Sprite>(PlayerEntity, "res/images/flatColour.png", 1, 1);
 
     // Utils
-    mMap.init();
     Time::init();
     Physics::init();
 
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type      = b2_dynamicBody;
-    bodyDef.position  = (b2Vec2) {0.0f, 4.0f};
-    bodyId   = b2CreateBody(Physics::worldId, &bodyDef);
+    mMap.init();  // Should Be initialised after Physics because it has physics
+                  // tiles
 
-    b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
-    b2ShapeDef shapeDef  = b2DefaultShapeDef();
-    shapeDef.density     = 1.0f;
-    shapeDef.friction    = 0.3f;
-    b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+    mPlayer.init();  // Also is using physics
 
     mIsRunning = true;
     printDependencyVersions();
+
+    Debug::g_draw.m_debugDraw.drawShapes           = true;
+    Debug::g_draw.m_debugDraw.drawJoints           = true;
+    Debug::g_draw.m_debugDraw.drawJointExtras      = true;
+    Debug::g_draw.m_debugDraw.drawAABBs            = true;
+    Debug::g_draw.m_debugDraw.drawMass             = true;
+    Debug::g_draw.m_debugDraw.drawContacts         = true;
+    Debug::g_draw.m_debugDraw.drawGraphColors      = true;
+    Debug::g_draw.m_debugDraw.drawContactNormals   = true;
+    Debug::g_draw.m_debugDraw.drawContactImpulses  = true;
+    Debug::g_draw.m_debugDraw.drawFrictionImpulses = true;
+    
+    Debug::g_draw.Create();
 }
 
 void Game::handleEvents()
@@ -82,6 +92,7 @@ void Game::handleEvents()
 void Game::update()
 {
     Physics::update();
+    mPlayer.update();
 }
 
 void Game::render()
@@ -96,13 +107,17 @@ void Game::render()
         auto &pos    = view.get<Position>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
-        pos.x = b2Body_GetPosition(bodyId).x;
-        pos.y = b2Body_GetPosition(bodyId).y;
+        pos.x = b2Body_GetPosition(Player::playerBody).x;
+        pos.y = b2Body_GetPosition(Player::playerBody).y;
+
+        // printf("%4.2f %4.2f\n", pos.x, pos.y );
 
         TextureManager::Draw(
             sprite.textureID,
-            SDL_FRect {pos.x, pos.y, sprite.width, sprite.height});
+            SDL_FRect {pos.x - 0.5f, pos.y - 0.5f, sprite.width, sprite.height});
     }
+    b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
+    Debug::g_draw.Flush();
 
     SDL_GL_SwapWindow(Window::window);
 }
@@ -113,7 +128,11 @@ void Game::cleanup()
     Window::close();  // Window should close after opengl
 
     Registry.destroy(PlayerEntity);
+    mPlayer.close();
+
+    Debug::g_draw.Destroy();
     Physics::close();
+
 }
 
 //
@@ -160,12 +179,6 @@ void printDependencyVersions()
         reinterpret_cast<const char *>(glGetString(GL_VERSION));
     std::cout << std::left << std::setw(20) << "OpenGL::GL"
               << (glVersion ? glVersion : "Unknown") << std::endl;
-
-    // OpenGL GLU Version
-    const char *gluVersion =
-        reinterpret_cast<const char *>(gluGetString(GLU_VERSION));
-    std::cout << std::left << std::setw(20) << "OpenGL::GLU"
-              << (gluVersion ? gluVersion : "Unknown") << std::endl;
 
     // GLM Version
     std::cout << std::left << std::setw(20) << "glm::glm" << GLM_VERSION_MAJOR

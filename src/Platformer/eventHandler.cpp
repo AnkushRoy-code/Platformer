@@ -1,66 +1,63 @@
 #include "eventHandler.h"
 
-#include <SDL_keycode.h>
-#include <entt/entt.hpp>
-#include <SDL_events.h>
+#include <SDL.h>
 #include <box2d/box2d.h>
+#include <functional>
+
+#include "Platformer/keyState.h"
 
 namespace Platformer
 {
+
 void Input::handleInputs(bool &isRunning)
 {
     SDL_Event event;
 
-    const float speed = 5.0f;  // Walking speed
-
     while (SDL_PollEvent(&event) != 0)
     {
-        if (event.type == SDL_QUIT)
+        switch (event.type)
         {
-            isRunning = false;
+                // clang-format off
+            case SDL_QUIT: isRunning = false; break;
+            case SDL_MOUSEBUTTONDOWN: changeCursorState(KeyState::keyPress, event); break;
+            case SDL_MOUSEBUTTONUP: changeCursorState(KeyState::keyRelease, event); break;
+            case SDL_KEYDOWN: changeKeyState(KeyState::keyPress, event); break;
+            case SDL_KEYUP: changeKeyState(KeyState::keyRelease, event); break;
+            default: break;
+                // clang-format on
         }
+    }
+}
 
-        else if (event.type == SDL_KEYDOWN)
-        {
-            switch (event.key.keysym.sym)
-            {
-                // case SDLK_a:
-                // case SDLK_LEFT:
-                //     b2Body_SetLinearVelocity(
-                //         playerBody,
-                //         b2Vec2 {-speed,
-                //                 b2Body_GetLinearVelocity(playerBody).y});
-                //     break;
-                // case SDLK_d:
-                // case SDLK_RIGHT:
-                //     b2Body_SetLinearVelocity(
-                //         playerBody,
-                //         b2Vec2 {speed, b2Body_GetLinearVelocity(playerBody).y});
-                //     break;
-                // case SDLK_SPACE:
-                //     b2Body_ApplyLinearImpulseToCenter(
-                //         playerBody,
-                //         b2Vec2 {b2Body_GetLinearVelocity(playerBody).x, 15},
-                //         true);
-                //     break;
+void Input::changeKeyState(const std::function<void(int)> &function,
+                           const SDL_Event &event)
+{
+    switch (event.key.keysym.sym)
+    {
+            // clang-format off
+        case SDLK_a:
+        case SDLK_LEFT: function(KeyState::LEFT); break;
+        case SDLK_d:
+        case SDLK_RIGHT: function(KeyState::RIGHT); break;
+        case SDLK_SPACE: function(KeyState::SPACE); break;
+        case SDLK_LSHIFT:
+        case SDLK_RSHIFT: function(KeyState::SHIFT); break;
+        default: break;
+            // clang-format on
+    }
+}
 
-                // default:
-                //     break;
-            }
-        }
-        if (event.type == SDL_KEYUP)
-        {
-            switch (event.key.keysym.sym)
-            {
-                // case SDLK_LEFT:
-                // case SDLK_RIGHT:
-                //     // Stop horizontal movement when the key is released
-                //     b2Body_SetLinearVelocity(
-                //         playerBody,
-                //         b2Vec2 {0, b2Body_GetLinearVelocity(playerBody).y});
-                //     break;
-            }
-        }
+void Input::changeCursorState(const std::function<void(int)> &function,
+                              const SDL_Event &event)
+{
+    switch (event.button.button)
+    {
+            // clang-format off
+        case SDL_BUTTON_RIGHT: function(KeyState::R_MOUSEBUTTON); break;
+        case SDL_BUTTON_LEFT: function(KeyState::L_MOUSEBUTTON); break;
+        case SDL_BUTTON_MIDDLE: function(KeyState::M_MOUSEBUTTON); break;
+        default: break;
+            // clang-format on
     }
 }
 
