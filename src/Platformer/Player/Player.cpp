@@ -81,7 +81,7 @@ void Player::update()
         {
             if (vel.x > -1)
             {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-50, gravity.y},
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-30, gravity.y},
                                           true);
             }
             else
@@ -95,7 +95,7 @@ void Player::update()
         {
             if (vel.x < 1)
             {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {50, gravity.y},
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {30, gravity.y},
                                           true);
             }
             else
@@ -117,7 +117,7 @@ void Player::update()
         {
             if (vel.x > -5)
             {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-50, gravity.y},
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {-30, gravity.y},
                                           true);
             }
         }
@@ -126,7 +126,7 @@ void Player::update()
         {
             if (vel.x < 5)
             {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {50, gravity.y},
+                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {30, gravity.y},
                                           true);
             }
         }

@@ -8,7 +8,7 @@
 
 #include "box2d/types.h"
 #include "Utils/Map.h"
-#include "Utils/Component.h"
+#include "Utils/Components/Component.h"
 #include "Utils/TextureManager.h"
 #include "Utils/Time.h"
 
@@ -54,9 +54,9 @@ void Game::init()
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
 
-    Registry.emplace<Position>(PlayerEntity, 10.0f,
+    Registry.emplace<PositionComponent>(PlayerEntity, 10.0f,
                                10.0f);  // doesn't matter will change soon
-    Registry.emplace<Sprite>(PlayerEntity, "res/images/flatColour.png", 1, 1);
+    Registry.emplace<SpriteComponent>(PlayerEntity, "res/images/flatColour.png", 1, 1);
 
     // Utils
     Time::init();
@@ -71,15 +71,15 @@ void Game::init()
     printDependencyVersions();
 
     Debug::g_draw.m_debugDraw.drawShapes           = true;
-    Debug::g_draw.m_debugDraw.drawJoints           = true;
-    Debug::g_draw.m_debugDraw.drawJointExtras      = true;
-    Debug::g_draw.m_debugDraw.drawAABBs            = true;
-    Debug::g_draw.m_debugDraw.drawMass             = true;
-    Debug::g_draw.m_debugDraw.drawContacts         = true;
-    Debug::g_draw.m_debugDraw.drawGraphColors      = true;
-    Debug::g_draw.m_debugDraw.drawContactNormals   = true;
-    Debug::g_draw.m_debugDraw.drawContactImpulses  = true;
-    Debug::g_draw.m_debugDraw.drawFrictionImpulses = true;
+    Debug::g_draw.m_debugDraw.drawJoints           = false;
+    Debug::g_draw.m_debugDraw.drawJointExtras      = false;
+    Debug::g_draw.m_debugDraw.drawAABBs            = false;
+    Debug::g_draw.m_debugDraw.drawMass             = false;
+    Debug::g_draw.m_debugDraw.drawContacts         = false;
+    Debug::g_draw.m_debugDraw.drawGraphColors      = false;
+    Debug::g_draw.m_debugDraw.drawContactNormals   = false;
+    Debug::g_draw.m_debugDraw.drawContactImpulses  = false;
+    Debug::g_draw.m_debugDraw.drawFrictionImpulses = false;
     
     Debug::g_draw.Create();
 }
@@ -101,11 +101,11 @@ void Game::render()
     mMap.drawMap();
 
     // Render entities not needed now also doesn't work
-    auto view = Registry.view<Position, Sprite>();
+    auto view = Registry.view<PositionComponent, SpriteComponent>();
     for (auto entity: view)
     {
-        auto &pos    = view.get<Position>(entity);
-        auto &sprite = view.get<Sprite>(entity);
+        auto &pos    = view.get<PositionComponent>(entity);
+        auto &sprite = view.get<SpriteComponent>(entity);
 
         pos.x = b2Body_GetPosition(Player::playerBody).x;
         pos.y = b2Body_GetPosition(Player::playerBody).y;

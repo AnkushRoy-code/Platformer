@@ -4,25 +4,20 @@
 #define INCLUDE_PLATFORMER_COMPONENT_H_
 
 #include "Utils/TextureManager.h"
-#include <SDL.h>
+#include "Utils/Components/TileComponent.h"
 #include <filesystem>
+
+// Add other Components
 
 namespace Platformer
 {
 /// Position in 2D space
-struct Position
-{
-    float x, y;
-};
 
-struct Sprite
+struct SpriteComponent
 {
-    Sprite(const std::filesystem::path &Path, int Width, int Height);
-    ~Sprite();
+    SpriteComponent(const std::filesystem::path &Path, int Width, int Height);
     float width {}, height {};
     GLuint textureID {};
-    void initialise();
-    void deinitialise();
 };
 
 }  // namespace Platformer
