@@ -4,7 +4,6 @@
 #define INCLUDE_PLATFORMER_COMPONENT_H_
 
 #include "Utils/TextureManager.h"
-#include "Utils/Components/TileComponent.h"
 #include <filesystem>
 
 // Add other Components
@@ -12,6 +11,11 @@
 namespace Platformer
 {
 /// Position in 2D space
+
+struct PositionComponent
+{
+    float x, y;
+};
 
 struct SpriteComponent
 {

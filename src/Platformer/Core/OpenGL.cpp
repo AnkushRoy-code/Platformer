@@ -10,7 +10,7 @@ namespace Platformer
 
 void OpenGL::init()
 {
-    glClearColor(30 / 255.0f, 150 / 255.0f, 100 / 255.0f, 1.0f);
+    glClearColor(61 / 255.0f, 188 / 255.0f, 217 / 255.0f, 1.0f);
 
     auto scale  = Window::WindowScale;
     auto Width  = TILESET_WIDTH * TILESET_SIZE * scale;

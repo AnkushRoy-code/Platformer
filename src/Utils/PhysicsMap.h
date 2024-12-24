@@ -69,6 +69,8 @@ public:
 private:
     static void initPerimeterBodyId();
 
+    static void MakeBoundary();
+
     /// Get different clusters of physics tiles
     template<size_t WIDTH, size_t HEIGHT>
     static std::vector<std::vector<b2Vec2>> findClusters(
@@ -93,7 +95,6 @@ private:
     static void removeNonCommonElements(std::vector<b2Vec2> &vec1,
                                         std::vector<b2Vec2> &vec2);
 
-
     /// Invert the Y axis :)
     static std::vector<b2Vec2> invertY(const std::vector<b2Vec2> &points);
 
@@ -104,7 +105,6 @@ private:
 
     /// Not used now. IDK may be removed later
     static void reversePolygon(std::vector<b2Vec2> &corners);
-
 
     static b2Vec2 computeCentroid(const std::vector<b2Vec2> &points);
     static float calculateAngle(const b2Vec2 &center, const b2Vec2 &point);

@@ -1,6 +1,8 @@
 add_library(Utils
     PhysicsMap.cpp
     PhysicsMap.h
+    BackGround.cpp
+    BackGround.h
     Map.cpp
     Map.h
     TextureManager.cpp

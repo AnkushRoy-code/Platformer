@@ -77,6 +77,8 @@
  * Since you read through the end. Here is a cookie for you 🍪 I hope your font
  * can render it :)
  *
+ *  Addition:
+ *      I decided to add the boundary box in the same body itself.
  *
  */
 
@@ -93,6 +95,24 @@ bool vec2Equal(const b2Vec2 &a, const b2Vec2 &b)
 bool vec2Less(const b2Vec2 &a, const b2Vec2 &b)
 {
     return a.x < b.x || (a.x == b.x && a.y < b.y);
+}
+
+void PhysicsMap::MakeBoundary()
+{
+    b2Vec2 points[4] {
+        b2Vec2 {0, TILESET_HEIGHT + 10},
+        b2Vec2 {TILESET_WIDTH, TILESET_HEIGHT + 10},
+        b2Vec2 {TILESET_WIDTH, 0},
+        b2Vec2 {0, 0},
+    };
+
+    b2ChainDef perimeterChainDef = b2DefaultChainDef();
+    perimeterChainDef.isLoop     = true;
+
+    perimeterChainDef.count  = 4;
+    perimeterChainDef.points = points;
+
+    b2CreateChain(perimeterBodyId, &perimeterChainDef);
 }
 
 void Platformer::PhysicsMap::init(
@@ -158,6 +178,7 @@ void Platformer::PhysicsMap::init(
 
         b2CreateChain(perimeterBodyId, &perimeterChainDef);
     }
+    MakeBoundary();
 }
 
 void PhysicsMap::initPerimeterBodyId()
@@ -176,7 +197,7 @@ std::vector<std::vector<b2Vec2>> PhysicsMap::findClusters(
 
     auto isValid = [&](int x, int y)
     {
-        return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && grid[y][x] == 2
+        return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && grid[y][x] != 0
                && !visited[y][x];
     };
 
@@ -187,7 +208,7 @@ std::vector<std::vector<b2Vec2>> PhysicsMap::findClusters(
     {
         for (int x = 0; x < WIDTH; ++x)
         {
-            if (grid[y][x] == 2 && !visited[y][x])
+            if (grid[y][x] != 0 && !visited[y][x])
             {
                 std::vector<b2Vec2> cluster;
                 std::queue<b2Vec2> q;

@@ -56,7 +56,7 @@ void Game::init()
 
     Registry.emplace<PositionComponent>(PlayerEntity, 10.0f,
                                10.0f);  // doesn't matter will change soon
-    Registry.emplace<SpriteComponent>(PlayerEntity, "res/images/flatColour.png", 1, 1);
+    Registry.emplace<SpriteComponent>(PlayerEntity, "res/images/Player/Player.png", 1, 1);
 
     // Utils
     Time::init();
@@ -70,7 +70,7 @@ void Game::init()
     mIsRunning = true;
     printDependencyVersions();
 
-    Debug::g_draw.m_debugDraw.drawShapes           = true;
+    Debug::g_draw.m_debugDraw.drawShapes           = false;
     Debug::g_draw.m_debugDraw.drawJoints           = false;
     Debug::g_draw.m_debugDraw.drawJointExtras      = false;
     Debug::g_draw.m_debugDraw.drawAABBs            = false;
@@ -81,7 +81,7 @@ void Game::init()
     Debug::g_draw.m_debugDraw.drawContactImpulses  = false;
     Debug::g_draw.m_debugDraw.drawFrictionImpulses = false;
     
-    Debug::g_draw.Create();
+    // Debug::g_draw.Create();
 }
 
 void Game::handleEvents()
@@ -116,8 +116,8 @@ void Game::render()
             sprite.textureID,
             SDL_FRect {pos.x - 0.5f, pos.y - 0.5f, sprite.width, sprite.height});
     }
-    b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
-    Debug::g_draw.Flush();
+    // b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
+    // Debug::g_draw.Flush();
 
     SDL_GL_SwapWindow(Window::window);
 }
@@ -130,7 +130,7 @@ void Game::cleanup()
     Registry.destroy(PlayerEntity);
     mPlayer.close();
 
-    Debug::g_draw.Destroy();
+    // Debug::g_draw.Destroy();
     Physics::close();
 
 }

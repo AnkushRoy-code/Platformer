@@ -13,6 +13,11 @@ GLuint TextureManager::LoadTexture(const std::filesystem::path &filePath)
     int width, height, channels;
     stbi_set_flip_vertically_on_load(true);
 
+    if (!std::filesystem::exists(filePath))
+    {
+        std::cerr << "ERROR: Given file doesn't exist: " << filePath << "\n";
+    }
+
     unsigned char *data =
         stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
     if (!data)
