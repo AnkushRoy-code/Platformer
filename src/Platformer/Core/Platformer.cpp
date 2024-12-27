@@ -6,13 +6,10 @@
 #include "Platformer/Core/EventHandler.h"
 #include "Platformer/Physics/Physics.h"
 
-#include "box2d/types.h"
 #include "Utils/Map.h"
 #include "Utils/Components/Component.h"
 #include "Utils/TextureManager.h"
 #include "Utils/Time.h"
-
-#include "debugHelp/box2dDebugDraw.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,6 +20,12 @@
 
 // const auto M2P = 120;
 // const auto P2M = 1 / M2P;
+
+// #define DEBUM  // Yeah debum not debug
+
+#ifdef DEBUM
+#    include "debugHelp/box2dDebugDraw.h"
+#endif  // DEBUM
 
 namespace Platformer
 {
@@ -54,9 +57,12 @@ void Game::init()
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
 
-    Registry.emplace<PositionComponent>(PlayerEntity, 10.0f,
-                               10.0f);  // doesn't matter will change soon
-    Registry.emplace<SpriteComponent>(PlayerEntity, "res/images/Player/Player.png", 1, 1);
+    Registry.emplace<PositionComponent>(
+        PlayerEntity, 10.0f,
+        10.0f);  // doesn't matter will change soon
+    Registry.emplace<PlayerSprite>(PlayerEntity,
+                                   "res/images/Player/Animations/Idle.png", 1,
+                                   1, 11, 1000 / 12);
 
     // Utils
     Time::init();
@@ -70,6 +76,7 @@ void Game::init()
     mIsRunning = true;
     printDependencyVersions();
 
+#ifdef DEBUM
     Debug::g_draw.m_debugDraw.drawShapes           = false;
     Debug::g_draw.m_debugDraw.drawJoints           = false;
     Debug::g_draw.m_debugDraw.drawJointExtras      = false;
@@ -80,8 +87,9 @@ void Game::init()
     Debug::g_draw.m_debugDraw.drawContactNormals   = false;
     Debug::g_draw.m_debugDraw.drawContactImpulses  = false;
     Debug::g_draw.m_debugDraw.drawFrictionImpulses = false;
-    
-    // Debug::g_draw.Create();
+
+    Debug::g_draw.Create();
+#endif
 }
 
 void Game::handleEvents()
@@ -100,24 +108,12 @@ void Game::render()
     glClear(GL_COLOR_BUFFER_BIT);
     mMap.drawMap();
 
-    // Render entities not needed now also doesn't work
-    auto view = Registry.view<PositionComponent, SpriteComponent>();
-    for (auto entity: view)
-    {
-        auto &pos    = view.get<PositionComponent>(entity);
-        auto &sprite = view.get<SpriteComponent>(entity);
+    Player::render(Registry);
 
-        pos.x = b2Body_GetPosition(Player::playerBody).x;
-        pos.y = b2Body_GetPosition(Player::playerBody).y;
-
-        // printf("%4.2f %4.2f\n", pos.x, pos.y );
-
-        TextureManager::Draw(
-            sprite.textureID,
-            SDL_FRect {pos.x - 0.5f, pos.y - 0.5f, sprite.width, sprite.height});
-    }
-    // b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
-    // Debug::g_draw.Flush();
+#ifdef DEBUM
+    b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
+    Debug::g_draw.Flush();
+#endif  // DEBUM
 
     SDL_GL_SwapWindow(Window::window);
 }
@@ -130,9 +126,10 @@ void Game::cleanup()
     Registry.destroy(PlayerEntity);
     mPlayer.close();
 
-    // Debug::g_draw.Destroy();
+#ifdef DEBUM
+    Debug::g_draw.Destroy();
+#endif  // DEBUM
     Physics::close();
-
 }
 
 //

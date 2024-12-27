@@ -79,4 +79,32 @@ void TextureManager::Draw(GLuint tex, SDL_FRect rect)
     glBindTexture(GL_TEXTURE_2D, 0);  // Unbind the texture
 }
 
+void TextureManager::DrawAnimated(GLuint tex,
+                                  SDL_FRect rect,
+                                  int frame,
+                                  int framesPerRow)
+{
+    // Fixed height per frame (normalized to 0-1 range)
+    float frameWidth = 1.0f / framesPerRow;
+    float u          = frameWidth * frame;
+
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(u, 0);
+    glVertex2f(rect.x, rect.y);
+
+    glTexCoord2f(u + frameWidth, 0);
+    glVertex2f(rect.x + rect.w, rect.y);
+
+    glTexCoord2f(u + frameWidth, 1.0f);
+    glVertex2f(rect.x + rect.w, rect.y + rect.h);
+
+    glTexCoord2f(u, 1.0f);
+    glVertex2f(rect.x, rect.y + rect.h);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 }  // namespace Platformer

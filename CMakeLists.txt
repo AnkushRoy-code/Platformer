@@ -20,21 +20,59 @@ add_custom_target(CopyResources ALL
 )
 
 # Getting Dependencies
+
 include(FetchContent)
+
+option(isStatic "Build with static linking" OFF)
+set(FETCHCONTENT_QUIET FALSE)
 
 find_package(OpenGL REQUIRED)
 
-set(FETCHCONTENT_QUIET FALSE)
+if(isStatic)
+    set(SDL_SHARED OFF)
+    set(SDL_STATIC ON)
+    set(BUILD_SHARED_LIBS OFF)
+    set(BOX2D_BUILD_SHARED OFF)
 
-# SDL -- Please do not compile this, have a heart for you...
-FetchContent_Declare(
-    SDL2
-    URL https://github.com/libsdl-org/SDL/releases/download/release-2.30.10/SDL2-2.30.10.zip
-    URL_HASH SHA256=14b06b30d3400953875e73b0c4771cad1483488a1ef816803610f22b32300ce8
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    FIND_PACKAGE_ARGS
-)
-FetchContent_MakeAvailable(SDL2)
+    FetchContent_Declare(
+        sdl2
+        URL https://github.com/libsdl-org/SDL/releases/download/release-2.30.10/SDL2-2.30.10.zip
+        URL_HASH SHA256=14b06b30d3400953875e73b0c4771cad1483488a1ef816803610f22b32300ce8
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    FetchContent_MakeAvailable(sdl2)
+
+    # GLM (OpenGL Mathematics)
+    FetchContent_Declare(
+        glm
+        URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
+        URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    FetchContent_MakeAvailable(glm)
+
+else() # Note to self: The if statements are not same. If user wants static SDL2 then it has to be compiled. If not then he doesn't need to compile it. FIND_PACKAGE_ARGS option asks CMake ti first find the system for packages if not found compile it. But it doesn't work for Static
+
+    # SDL -- Please do not compile this, have a heart for you...
+    FetchContent_Declare(
+        SDL2
+        URL https://github.com/libsdl-org/SDL/releases/download/release-2.30.10/SDL2-2.30.10.zip
+        URL_HASH SHA256=14b06b30d3400953875e73b0c4771cad1483488a1ef816803610f22b32300ce8
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        FIND_PACKAGE_ARGS
+    )
+    FetchContent_MakeAvailable(SDL2)
+
+    # GLM (OpenGL Mathematics)
+    FetchContent_Declare(
+        glm
+        URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
+        URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        FIND_PACKAGE_ARGS
+    )
+    FetchContent_MakeAvailable(glm)
+endif()
 
 FetchContent_Declare(
   glew
@@ -52,15 +90,6 @@ if(NOT glew_POPULATED)
   add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-# GLM (OpenGL Mathematics)
-FetchContent_Declare(
-	glm
-    URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
-    URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    FIND_PACKAGE_ARGS
-)
-FetchContent_MakeAvailable(glm)
 
 # Entt Fetch (ECS - Entity Component System)
 FetchContent_Declare(

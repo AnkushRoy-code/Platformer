@@ -3,7 +3,7 @@
 namespace Platformer::KeyState
 {
 
-std::bitset<7> keyState;
+std::bitset<8> keyState;
 
 void keyPress(int keyCode)
 {
@@ -13,11 +13,6 @@ void keyPress(int keyCode)
 void keyRelease(int keyCode)
 {
     keyState[keyCode] = false;
-}
-
-[[nodiscard]] bool isKeyPressed(int keyCode)
-{
-    return keyState[keyCode];
 }
 
 }  // namespace Platformer::KeyState

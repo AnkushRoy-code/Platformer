@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include <GL/glew.h>
 
-
 namespace Platformer
 {
 class TextureManager
@@ -16,6 +15,9 @@ public:
     static GLuint LoadTexture(const std::filesystem::path &filePath);
 
     static void Draw(GLuint tex, SDL_FRect rect);
+
+    static void
+        DrawAnimated(GLuint tex, SDL_FRect rect, int frame, int framesPerRow);
 };
 }  // namespace Platformer
 

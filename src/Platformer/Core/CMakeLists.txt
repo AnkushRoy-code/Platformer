@@ -17,13 +17,23 @@ target_include_directories(Core PUBLIC
     ${entt_SOURCE_DIR}/src
 )
 
+if(isStatic)
+    target_link_libraries(Core PUBLIC 
+        SDL2::SDL2-static
+        libglew_static
+    )
+else()
+    target_link_libraries(Core PUBLIC 
+        SDL2::SDL2
+        libglew_shared
+    )
+endif()
+
 target_link_libraries(Core PUBLIC 
-    SDL2::SDL2
     OpenGL::GL
     OpenGL::GLU
     glm::glm
     Utils
     Player
     Debug
-    libglew_shared
 )

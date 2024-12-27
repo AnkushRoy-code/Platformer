@@ -17,6 +17,8 @@ public:
     /// frame and the current frame in a game loop.
     static double deltaTime();
 
+    /// Get the time in milliseconds since the start of the program (like SDL_GetTicks)
+    static uint32_t getTicks();
 private:
     static double mDeltaTime;
 
@@ -24,6 +26,7 @@ private:
         mPreviousTime;
     static std::chrono::time_point<std::chrono::high_resolution_clock>
         mCurrentTime;
+    static std::chrono::time_point<std::chrono::high_resolution_clock> mStartTime;
 
     // --------------------- Cap FPS ---------------------
 public:

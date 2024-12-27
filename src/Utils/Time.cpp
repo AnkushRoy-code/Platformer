@@ -8,6 +8,7 @@ namespace Platformer
 double Time::mDeltaTime = 0.0;
 std::chrono::time_point<std::chrono::high_resolution_clock> Time::mPreviousTime;
 std::chrono::time_point<std::chrono::high_resolution_clock> Time::mCurrentTime;
+std::chrono::time_point<std::chrono::high_resolution_clock> Time::mStartTime;
 
 const int Time::mTargetFPS = 60;  // In seconds
 const std::chrono::milliseconds Time::mFrameDuration =
@@ -15,17 +16,26 @@ const std::chrono::milliseconds Time::mFrameDuration =
 
 void Time::init()
 {
-    mPreviousTime = std::chrono::high_resolution_clock::now();
+    mStartTime    = std::chrono::high_resolution_clock::now();
+    mPreviousTime = mStartTime;
 }
 
-double Time::deltaTime(){
+uint32_t Time::getTicks()
+{
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - mStartTime);
+    return static_cast<uint32_t>(duration.count());
+}
+
+double Time::deltaTime()
+{
     return mDeltaTime;
 }
 void Time::updateDeltaTime()
 {
     using namespace std::chrono;
 
-    mCurrentTime                  = high_resolution_clock::now();
+    mCurrentTime                 = high_resolution_clock::now();
     duration<double> elapsedTime = mCurrentTime - mPreviousTime;
 
     mDeltaTime    = elapsedTime.count();
