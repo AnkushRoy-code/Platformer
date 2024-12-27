@@ -12,13 +12,12 @@ enum keyCodes
     RIGHT,
     LEFT,
     SHIFT,
-    DASH,
     R_MOUSEBUTTON,
     L_MOUSEBUTTON,
     M_MOUSEBUTTON,
 };
 
-extern std::bitset<8> keyState; // If you change the size of this bitset here don't forget to change it in keyState.cpp too
+extern std::bitset<7> keyState; // If you change the size of this bitset here don't forget to change it in keyState.cpp too
 
 void keyPress(int keyCode);
 void keyRelease(int keyCode);

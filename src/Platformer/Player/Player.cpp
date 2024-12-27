@@ -2,6 +2,7 @@
 
 #include "Platformer/Physics/Physics.h"
 #include "Platformer/Core/KeyState.h"
+#include "PlayerState.h"
 #include "Utils/Components/Component.h"
 
 #include <SDL_timer.h>
@@ -75,7 +76,7 @@ void Player::update()
     if (isPlayerOnGround)
     {
         inAir          = false;
-        doubleJumpAble = true;
+        // doubleJumpAble = true;
     }
 
     if (isPlayerOnAir)
@@ -86,11 +87,13 @@ void Player::update()
     // Handling inputs
     using namespace Platformer::KeyState;
 
-    b2Vec2 vel     = b2Body_GetLinearVelocity(playerBody);
-    b2Vec2 gravity = b2World_GetGravity(Physics::worldId);
-    float force    = 15;
+    // b2Vec2 vel     = b2Body_GetLinearVelocity(playerBody);
+    // b2Vec2 gravity = b2World_GetGravity(Physics::worldId);
+    // float force    = 15;
 
-    if (keyState[SHIFT])
+    state->update(inAir);
+
+    /* if (keyState[SHIFT])
     {
         if (keyState[LEFT] && !keyState[RIGHT])
         {
@@ -127,22 +130,6 @@ void Player::update()
     }
     else
     {
-        if (keyState[DASH])
-        {
-            if (vel.x > 0)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {5, 0},
-                                                  true);
-                keyRelease(DASH);  // Reset key state after handling
-            }
-            else if (vel.y < 0)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {-5, 0},
-                                                  true);
-                keyRelease(DASH);  // Reset key state after handling
-            }
-        }
-
         if (keyState[LEFT] && !keyState[RIGHT])
         {
             if (vel.x > -maxSpeed)
@@ -176,7 +163,7 @@ void Player::update()
             }
             keyRelease(SPACE);  // Reset key state after handling
         }
-    }
+    } */
 }
 
 void Player::render(entt::registry &reg)
