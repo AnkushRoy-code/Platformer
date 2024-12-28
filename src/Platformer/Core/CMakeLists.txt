@@ -14,7 +14,6 @@ add_library(Core
 target_include_directories(Core PUBLIC     
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/lib
-    ${entt_SOURCE_DIR}/src
 )
 
 if(isStatic)

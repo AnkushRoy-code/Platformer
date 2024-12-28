@@ -9,31 +9,33 @@ namespace Platformer
 
 SpriteComponent::SpriteComponent(const std::filesystem::path &Path,
                                  int Width,
-                                 int Height) : width(Width), height(Height)
+                                 int Height) :
+    mWidth(Width), mHeight(Height), mAnimation(false), mFrames(0), mSpeed(0)
 {
-    textureID = TextureManager::LoadTexture(Path);
 }
 
 SpriteComponent::SpriteComponent(const std::filesystem::path &Path,
                                  int Width,
                                  int Height,
                                  int Frames,
-                                 int Speed)
+                                 int Speed) :
+    mPath(Path), mWidth(Width), mHeight(Height), mAnimation(true),
+    mFrames(Frames), mSpeed(Speed)
 {
-    textureID  = TextureManager::LoadTexture(Path);
-    mFrames    = Frames;
-    mSpeed     = Speed;
-    mAnimation = true;
-    width      = Width;
-    height     = Height;
+}
+
+void SpriteComponent::init()
+{
+    textureID = TextureManager::LoadTexture(mPath);
 }
 
 void SpriteComponent::draw(SDL_FRect rect)
 {
-    if (mAnimation)
+    if (mAnimation && mFrames != 1)
     {
         int frame =
-            width * static_cast<int>((Time::getTicks() / mSpeed) % mFrames);
+            mWidth * static_cast<int>((Time::getTicks() / mSpeed) % mFrames);
+
         TextureManager::DrawAnimated(textureID, rect, frame, mFrames);
     }
 

@@ -3,10 +3,10 @@
 
 #include "Platformer/Player/Player.h"
 #include "box2d/id.h"
-#include "entt/entity/fwd.hpp"
 #include "Utils/Map.h"
 
 #include <SDL.h>
+#include <memory>
 
 namespace Platformer
 {
@@ -21,9 +21,6 @@ public:
      */
     void run();
 
-    static entt::registry Registry;
-    static entt::entity PlayerEntity;
-
 private:
     void init();
     void handleEvents();
@@ -33,7 +30,7 @@ private:
     void handleInput(const b2BodyId &bodyId);
 
 private:
-    Player mPlayer {};
+    std::unique_ptr<Player> mPlayer = std::make_unique<Player>();
     bool mIsRunning {};
     Map mMap {};
 };

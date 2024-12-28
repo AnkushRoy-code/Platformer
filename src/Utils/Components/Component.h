@@ -27,33 +27,17 @@ public:
                     int Height,
                     int Frames,
                     int Speed);
+
+    void init();
+
     void draw(SDL_FRect rect);
 
-    float width {}, height {};
-    GLuint textureID {};
-
-private:
-    bool mAnimation = false;
-    int mFrames {};
-    int mSpeed {};
-};
-
-class PlayerSprite : public SpriteComponent
-{
-public:
-    PlayerSprite(const std::filesystem::path &Path, int Width, int Height) :
-        SpriteComponent(Path, Width, Height)
-    {
-    }
-
-    PlayerSprite(const std::filesystem::path &Path,
-                 int Width,
-                 int Height,
-                 int Frames,
-                 int Speed) :
-        SpriteComponent(Path, Width, Height, Frames, Speed)
-    {
-    }
+    std::filesystem::path mPath;
+    float mWidth, mHeight;
+    GLuint textureID;
+    bool mAnimation;
+    int mFrames;
+    int mSpeed;
 };
 
 }  // namespace Platformer

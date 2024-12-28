@@ -42,7 +42,6 @@ void Input::changeKeyState(const std::function<void(int)> &function,
         case SDLK_SPACE  : function(KeyState::SPACE); break;
         case SDLK_LSHIFT :
         case SDLK_RSHIFT : function(KeyState::SHIFT); break;
-        case SDLK_q      : function(KeyState::DASH); break;
         default          : break;
             // clang-format on
     }

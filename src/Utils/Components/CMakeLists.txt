@@ -1,9 +1,8 @@
-# Made a different directory thinking I will have a lot of components. As of now I only have 2 because I calculated wrong. :(
-
-
 add_library(Components
     Component.cpp
     Component.h
+    Animation.cpp
+    Animation.h
 )
 
 if(isStatic)

@@ -14,12 +14,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <entt/entt.hpp>
 #include <box2d/box2d.h>
 #include <iostream>
-
-// const auto M2P = 120;
-// const auto P2M = 1 / M2P;
 
 // #define DEBUM  // Yeah debum not debug
 
@@ -29,9 +25,6 @@
 
 namespace Platformer
 {
-
-entt::registry Game::Registry {};
-entt::entity Game::PlayerEntity = Game::Registry.create();
 
 void Game::run()
 {
@@ -57,13 +50,6 @@ void Game::init()
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
 
-    Registry.emplace<PositionComponent>(
-        PlayerEntity, 10.0f,
-        10.0f);  // doesn't matter will change soon
-    Registry.emplace<PlayerSprite>(PlayerEntity,
-                                   "res/images/Player/Animations/Idle.png", 1,
-                                   1, 11, 1000 / 12);
-
     // Utils
     Time::init();
     Physics::init();
@@ -71,7 +57,7 @@ void Game::init()
     mMap.init();  // Should Be initialised after Physics because it has physics
                   // tiles
 
-    mPlayer.init();  // Also is using physics
+    mPlayer->init();  // Also is using physics
 
     mIsRunning = true;
     printDependencyVersions();
@@ -100,7 +86,7 @@ void Game::handleEvents()
 void Game::update()
 {
     Physics::update();
-    mPlayer.update();
+    mPlayer->update();
 }
 
 void Game::render()
@@ -108,7 +94,7 @@ void Game::render()
     glClear(GL_COLOR_BUFFER_BIT);
     mMap.drawMap();
 
-    Player::render(Registry);
+    mPlayer->render();
 
 #ifdef DEBUM
     b2World_Draw(Physics::worldId, &Debug::g_draw.m_debugDraw);
@@ -123,8 +109,7 @@ void Game::cleanup()
     OpenGL::close();
     Window::close();  // Window should close after opengl
 
-    Registry.destroy(PlayerEntity);
-    mPlayer.close();
+    mPlayer->close();
 
 #ifdef DEBUM
     Debug::g_draw.Destroy();

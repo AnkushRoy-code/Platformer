@@ -1,13 +1,11 @@
 #include "Player.h"
 
 #include "Platformer/Physics/Physics.h"
-#include "Platformer/Core/KeyState.h"
-#include "Utils/Components/Component.h"
+#include "PlayerState.h"
 
 #include <SDL_timer.h>
 #include <box2d/collision.h>
 #include <SDL_rect.h>
-#include <entt/entt.hpp>
 #include <box2d/box2d.h>
 
 namespace Platformer
@@ -44,10 +42,13 @@ void Player::init()
     footSensorShape.isSensor   = true;
     footSensorId =
         b2CreatePolygonShape(playerBody, &footSensorShape, &footSensorBox);
+
+    mPlayerState->init();
 }
 
 void Player::update()
 {
+
     // Checking body on ground
     int groundContactCount      = 0;
     b2SensorEvents sensorEvents = b2World_GetSensorEvents(Physics::worldId);
@@ -74,8 +75,7 @@ void Player::update()
 
     if (isPlayerOnGround)
     {
-        inAir          = false;
-        doubleJumpAble = true;
+        inAir = false;
     }
 
     if (isPlayerOnAir)
@@ -83,118 +83,11 @@ void Player::update()
         inAir = true;
     }
 
-    // Handling inputs
-    using namespace Platformer::KeyState;
-
-    b2Vec2 vel     = b2Body_GetLinearVelocity(playerBody);
-    b2Vec2 gravity = b2World_GetGravity(Physics::worldId);
-    float force    = 15;
-
-    if (keyState[SHIFT])
-    {
-        if (keyState[LEFT] && !keyState[RIGHT])
-        {
-            if (vel.x > -1)
-            {
-                b2Body_ApplyForceToCenter(playerBody,
-                                          b2Vec2 {-force, gravity.y}, true);
-            }
-            else
-            {
-                b2Body_ApplyForceToCenter(
-                    playerBody, b2Vec2 {vel.x * -10, gravity.y}, true);
-            }
-        }
-
-        else if (keyState[RIGHT] && !keyState[LEFT])
-        {
-            if (vel.x < 1)
-            {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {force, gravity.y},
-                                          true);
-            }
-            else
-            {
-                b2Body_ApplyForceToCenter(
-                    playerBody, b2Vec2 {vel.x * -10, gravity.y}, true);
-            }
-        }
-        else
-        {
-            b2Body_ApplyForceToCenter(playerBody,
-                                      b2Vec2 {vel.x * -10, gravity.y}, true);
-        }
-    }
-    else
-    {
-        if (keyState[DASH])
-        {
-            if (vel.x > 0)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {5, 0},
-                                                  true);
-                keyRelease(DASH);  // Reset key state after handling
-            }
-            else if (vel.y < 0)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {-5, 0},
-                                                  true);
-                keyRelease(DASH);  // Reset key state after handling
-            }
-        }
-
-        if (keyState[LEFT] && !keyState[RIGHT])
-        {
-            if (vel.x > -maxSpeed)
-            {
-                b2Body_ApplyForceToCenter(playerBody,
-                                          b2Vec2 {-force, gravity.y}, true);
-            }
-        }
-
-        if (keyState[RIGHT] && !keyState[LEFT])
-        {
-            if (vel.x < maxSpeed)
-            {
-                b2Body_ApplyForceToCenter(playerBody, b2Vec2 {force, gravity.y},
-                                          true);
-            }
-        }
-
-        if (keyState[SPACE])
-        {
-            if (!inAir)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 4.5},
-                                                  true);
-            }
-            else if (doubleJumpAble)
-            {
-                b2Body_ApplyLinearImpulseToCenter(playerBody, b2Vec2 {0, 4.5},
-                                                  true);
-                doubleJumpAble = false;
-            }
-            keyRelease(SPACE);  // Reset key state after handling
-        }
-    }
+    mPlayerState->update(inAir);
 }
 
-void Player::render(entt::registry &reg)
-{
-    auto view = reg.view<PositionComponent, PlayerSprite>();
-    for (auto entity: view)
-    {
-        auto &pos    = view.get<PositionComponent>(entity);
-        auto &sprite = view.get<PlayerSprite>(entity);
-
-        pos.x = b2Body_GetPosition(Player::playerBody).x;
-        pos.y = b2Body_GetPosition(Player::playerBody).y;
-
-        SDL_FRect rect {pos.x - 0.5f, pos.y - 0.5f, sprite.width,
-                        sprite.height};
-
-        sprite.draw(rect);
-    }
+void Player::render() {
+    mPlayerState->render();
 }
 
 }  // namespace Platformer
