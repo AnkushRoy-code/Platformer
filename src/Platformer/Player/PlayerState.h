@@ -33,6 +33,9 @@ private:
 
     void updateMovement();
 
+    void fallingCondition();
+
+    bool dirLeft = true;
     bool inAir          = false;
     bool doubleJumpAble = true;
     b2Vec2 vel {};

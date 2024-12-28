@@ -26,6 +26,7 @@ public:
               int Speed) : SpriteComponent(Path, Width, Height, Frames, Speed)
     {
     }
+    void drawFlipped(SDL_FRect rect);
 };
 
 class Animations
@@ -45,7 +46,7 @@ public:
 
     void init();
 
-    void playAnimation(int Index, SDL_FRect Rect);
+    void playAnimation(int Index, SDL_FRect Rect, bool dirLeft = true);
 
 private:
     std::vector<Animation> mAnimations;

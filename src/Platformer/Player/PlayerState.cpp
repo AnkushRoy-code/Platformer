@@ -17,6 +17,18 @@ void PlayerState::init()
     mAnimations.addAnimation("res/images/Player/Animations/Idle.png", 1, 1, 11,
                              1000 / 12, States::Idling);
 
+    mAnimations.addAnimation("res/images/Player/Animations/Run.png", 1, 1, 12,
+                             1000 / 20, States::Walking);
+
+    mAnimations.addAnimation("res/images/Player/Animations/Fall.png", 1, 1,
+                             States::Falling);
+
+    mAnimations.addAnimation("res/images/Player/Animations/Jump.png", 1, 1,
+                             States::Jumping);
+
+    mAnimations.addAnimation("res/images/Player/Animations/DoubleJump.png", 1,
+                             1, 6, 1000 / 20, States::DoubleJumping);
+
     mAnimations.init();
 }
 
@@ -45,7 +57,7 @@ void PlayerState::render()
 
     SDL_FRect rect = {pos.x - 0.5f, pos.y - 0.5f, 1, 1};
 
-    mAnimations.playAnimation(States::Idling, rect);
+    mAnimations.playAnimation(currentState, rect, dirLeft);
 }
 
 using namespace Platformer::KeyState;
@@ -66,6 +78,7 @@ void PlayerState::updateMovement()
 
     if (keyState[LEFT] && !keyState[RIGHT])
     {
+        dirLeft = false;
         if (vel.x > -maxSpeed)
         {
             b2Body_ApplyForceToCenter(Player::playerBody,
@@ -75,6 +88,7 @@ void PlayerState::updateMovement()
 
     else if (keyState[RIGHT] && !keyState[LEFT])
     {
+        dirLeft = true;
         if (vel.x < maxSpeed)
         {
             b2Body_ApplyForceToCenter(Player::playerBody,
@@ -83,17 +97,31 @@ void PlayerState::updateMovement()
     }
 }
 
+void PlayerState::fallingCondition()
+{
+    if (vel.y < -0.13)
+    {
+        currentState = States::Falling;
+    }
+}
+
 void PlayerState::updateIdling()
 {
     // mAnimations.playAnimation(States::Idling)
-    if (keyState[LEFT] || keyState[RIGHT])
+    if ((keyState[LEFT] || keyState[RIGHT])
+        && !(keyState[LEFT] && keyState[RIGHT]))
     {
         currentState = States::Walking;
     }
-    else if (keyState[SPACE])
+
+    if (keyState[SPACE])
     {
         currentState = States::Jumping;
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+                                          true);
+        keyRelease(SPACE);
     }
+    fallingCondition();
 }
 
 void PlayerState::updateWalking()
@@ -103,6 +131,7 @@ void PlayerState::updateWalking()
 
     if (keyState[LEFT] && !keyState[RIGHT])
     {
+        dirLeft = false;
         if (vel.x > -maxSpeed)
         {
             b2Body_ApplyForceToCenter(Player::playerBody,
@@ -112,6 +141,7 @@ void PlayerState::updateWalking()
 
     else if (keyState[RIGHT] && !keyState[LEFT])
     {
+        dirLeft = true;
         if (vel.x < maxSpeed)
         {
             b2Body_ApplyForceToCenter(Player::playerBody,
@@ -119,18 +149,26 @@ void PlayerState::updateWalking()
         }
     }
 
-    else if (!keyState[LEFT] && !keyState[RIGHT])
+    else if ((!keyState[LEFT] && !keyState[RIGHT])
+             || (keyState[LEFT] && keyState[RIGHT]))
     {
         currentState = States::Idling;
     }
-    else if (keyState[SPACE])
+
+    if (keyState[SPACE])
     {
         currentState = States::Jumping;
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+                                          true);
+        keyRelease(SPACE);
     }
+
+    fallingCondition();
 }
 
 void PlayerState::updateFalling()
 {
+
     updateMovement();
     if (!inAir)
     {
@@ -146,11 +184,18 @@ void PlayerState::updateFalling()
         keyRelease(SPACE);
         doubleJumpAble = false;
     }
+
+    else if (vel.y == 0)
+    {
+        currentState = States::Idling;
+    }
 }
 
 void PlayerState::updateJumping()
 {
     updateMovement();
+
+    // same as fallingCondition();
     if (vel.y < 0)
     {
         currentState = States::Falling;
@@ -169,6 +214,8 @@ void PlayerState::updateJumping()
 void PlayerState::updateDoubleJumping()
 {
     updateMovement();
+    
+    // same as fallingCondition();
     if (vel.y < 0)
     {
         currentState = States::Falling;

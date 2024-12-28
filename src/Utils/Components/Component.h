@@ -32,7 +32,6 @@ public:
 
     void draw(SDL_FRect rect);
 
-private:
     std::filesystem::path mPath;
     float mWidth, mHeight;
     GLuint textureID;

@@ -6,7 +6,7 @@ This will be my first platformer game. It will have features people take for gra
     - [x] Walk (Press Shift)
     - [x] ~Crouch~
     - [x] Jump
-- [x] ~Attacks~ (I support peace)
+- [x] ~Attacks~ (I support peece)
     - [x] ~Mele~
     - [x] ~Dash~
     - [x] ~Block~
