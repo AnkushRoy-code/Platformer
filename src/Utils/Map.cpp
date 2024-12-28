@@ -52,7 +52,7 @@ void Map::init()
     otherThing = TextureManager::LoadTexture("res/images/Tileset/OtherThing.png");
     otherThing2 = TextureManager::LoadTexture("res/images/Tileset/OtherThing2.png");
 
-    BackGroundImg = TextureManager::LoadTexture("res/images/BackGround/BackGround2.png");
+    BackGroundImg = TextureManager::LoadTexture("res/images/BackGround/BackGround.png");
     // clang-format on
 
     if (!bottomLeft || !bottomMiddle || !bottomRight || !middleLeft
@@ -84,7 +84,7 @@ void Map::init()
     horizontalSpeed = 0.25;
 
     clouds.emplace_back(std::make_unique<BackgroundCloud>(
-        "res/images/Clouds/Cloud3.png", PositionComponent {-10, 4},
+        "res/images/Clouds/Cloud4.png", PositionComponent {-10, 4},
         horizontalSpeed));
 
     PhysicsMap::init(lvl1);

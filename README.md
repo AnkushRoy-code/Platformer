@@ -1,24 +1,23 @@
 This will be my first platformer game. It will have features people take for granted like:
 
 - [x] Controlable Character
-- [ ] Movements
+- [x] Movements
     - [x] Run
     - [x] Walk (Press Shift)
-    - [ ] Crouch
+    - [x] ~Crouch~
     - [x] Jump
-- [ ] Attacks
-    - [ ] Mele
-    - [ ] Dash
-    - [ ] Block
+- [x] ~Attacks~ (I support peace)
+    - [x] ~Mele~
+    - [x] ~Dash~
+    - [x] ~Block~
 - [x] Physics System (Box2D-v3)
 - [ ] Animations
 - [ ] Enemy AI
-- [ ] Level System
+- [x] Level System (Not the best rn. Can improve on it)
 
 ## Dependencies:
 
 - Fetched:
-    - Entt
     - GLEW
     - Box2D
     - GLM

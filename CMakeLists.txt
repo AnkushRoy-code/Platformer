@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(Platformer VERSION 0.1.3 LANGUAGES CXX)
+project(Platformer VERSION 0.2.8 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -89,16 +89,6 @@ if(NOT glew_POPULATED)
   FetchContent_Populate(glew)
   add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
-
-
-# Entt Fetch (ECS - Entity Component System)
-FetchContent_Declare(
-    EnTT
-    URL https://github.com/skypjack/entt/archive/refs/tags/v3.14.0.zip
-    URL_HASH SHA256=3c3d8014294bf1918e5e1aae537dc823f68964fa3c3dec99d10fa22e5d63a6fe
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-FetchContent_MakeAvailable(EnTT)
 
 # box2d Fetch (Physics)
 FetchContent_Declare(

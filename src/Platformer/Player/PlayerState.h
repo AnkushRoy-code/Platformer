@@ -1,11 +1,12 @@
 #ifndef INCLUDE_PLAYER_PLAYERSTATE_H_
 #define INCLUDE_PLAYER_PLAYERSTATE_H_
 
+#include "Utils/Components/Animation.h"
 #include "box2d/math_functions.h"
 namespace Platformer
 {
 
-enum class States
+enum States
 {
     Idling,
     Walking,
@@ -17,7 +18,9 @@ enum class States
 class PlayerState
 {
 public:
+    void init();
     void update(bool InAir);
+    void render();
 
 private:
     States currentState = States::Idling;
@@ -30,11 +33,13 @@ private:
 
     void updateMovement();
 
-    bool inAir = false;
+    bool inAir          = false;
     bool doubleJumpAble = true;
     b2Vec2 vel {};
     b2Vec2 gravity {};
     float force = 15;
+
+    Animations mAnimations;
 };
 
 }  // namespace Platformer

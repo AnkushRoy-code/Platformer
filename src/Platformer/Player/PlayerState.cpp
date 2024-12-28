@@ -3,13 +3,22 @@
 #include "Player.h"
 #include "Platformer/Physics/Physics.h"
 #include "Platformer/Core/KeyState.h"
+#include "Utils/Components/Animation.h"
 
+#include <SDL_rect.h>
 #include <box2d/box2d.h>
 #include <box2d/math_functions.h>
-#include <iostream>
 
 namespace Platformer
 {
+
+void PlayerState::init()
+{
+    mAnimations.addAnimation("res/images/Player/Animations/Idle.png", 1, 1, 11,
+                             1000 / 12, States::Idling);
+
+    mAnimations.init();
+}
 
 void PlayerState::update(bool InAir)
 {
@@ -27,6 +36,16 @@ void PlayerState::update(bool InAir)
         case States::DoubleJumping : updateDoubleJumping(); break;
             // clang-format on
     }
+}
+
+void PlayerState::render()
+{
+
+    b2Vec2 pos = b2Body_GetPosition(Player::playerBody);
+
+    SDL_FRect rect = {pos.x - 0.5f, pos.y - 0.5f, 1, 1};
+
+    mAnimations.playAnimation(States::Idling, rect);
 }
 
 using namespace Platformer::KeyState;
@@ -54,7 +73,7 @@ void PlayerState::updateMovement()
         }
     }
 
-    if (keyState[RIGHT] && !keyState[LEFT])
+    else if (keyState[RIGHT] && !keyState[LEFT])
     {
         if (vel.x < maxSpeed)
         {
@@ -66,11 +85,12 @@ void PlayerState::updateMovement()
 
 void PlayerState::updateIdling()
 {
+    // mAnimations.playAnimation(States::Idling)
     if (keyState[LEFT] || keyState[RIGHT])
     {
         currentState = States::Walking;
     }
-    if (keyState[SPACE])
+    else if (keyState[SPACE])
     {
         currentState = States::Jumping;
     }
@@ -78,12 +98,32 @@ void PlayerState::updateIdling()
 
 void PlayerState::updateWalking()
 {
-    updateMovement();
-    if (!keyState[LEFT] && !keyState[RIGHT])
+    // Same as updateMovement
+    float maxSpeed {5};
+
+    if (keyState[LEFT] && !keyState[RIGHT])
+    {
+        if (vel.x > -maxSpeed)
+        {
+            b2Body_ApplyForceToCenter(Player::playerBody,
+                                      b2Vec2 {-force, gravity.y}, true);
+        }
+    }
+
+    else if (keyState[RIGHT] && !keyState[LEFT])
+    {
+        if (vel.x < maxSpeed)
+        {
+            b2Body_ApplyForceToCenter(Player::playerBody,
+                                      b2Vec2 {force, gravity.y}, true);
+        }
+    }
+
+    else if (!keyState[LEFT] && !keyState[RIGHT])
     {
         currentState = States::Idling;
     }
-    if (keyState[SPACE])
+    else if (keyState[SPACE])
     {
         currentState = States::Jumping;
     }
@@ -98,7 +138,7 @@ void PlayerState::updateFalling()
         doubleJumpAble = true;
     }
 
-    if (keyState[SPACE] && doubleJumpAble)
+    else if (keyState[SPACE] && doubleJumpAble)
     {
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
@@ -115,7 +155,8 @@ void PlayerState::updateJumping()
     {
         currentState = States::Falling;
     }
-    if (keyState[SPACE] && doubleJumpAble)
+
+    else if (keyState[SPACE] && doubleJumpAble)
     {
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
