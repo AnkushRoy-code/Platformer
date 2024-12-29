@@ -39,20 +39,20 @@ void Map::init()
 {
 
     // clang-format off
-    bottomLeft = TextureManager::LoadTexture("res/images/Tileset/BottomLeft.png");
-    bottomMiddle = TextureManager::LoadTexture("res/images/Tileset/BottomMiddle.png");
-    bottomRight = TextureManager::LoadTexture("res/images/Tileset/BottomRight.png");
-    middleLeft = TextureManager::LoadTexture("res/images/Tileset/MiddleLeft.png");
-    middleMiddle = TextureManager::LoadTexture("res/images/Tileset/MiddleMiddle.png");
-    middleRight = TextureManager::LoadTexture("res/images/Tileset/MiddleRight.png");
-    topLeft = TextureManager::LoadTexture("res/images/Tileset/TopLeft.png");
-    topMiddle = TextureManager::LoadTexture("res/images/Tileset/TopMiddle.png");
-    topRight = TextureManager::LoadTexture("res/images/Tileset/TopRight.png");
+    bottomLeft = TextureManager::LoadTexture("res/Images/Tileset/BottomLeft.png");
+    bottomMiddle = TextureManager::LoadTexture("res/Images/Tileset/BottomMiddle.png");
+    bottomRight = TextureManager::LoadTexture("res/Images/Tileset/BottomRight.png");
+    middleLeft = TextureManager::LoadTexture("res/Images/Tileset/MiddleLeft.png");
+    middleMiddle = TextureManager::LoadTexture("res/Images/Tileset/MiddleMiddle.png");
+    middleRight = TextureManager::LoadTexture("res/Images/Tileset/MiddleRight.png");
+    topLeft = TextureManager::LoadTexture("res/Images/Tileset/TopLeft.png");
+    topMiddle = TextureManager::LoadTexture("res/Images/Tileset/TopMiddle.png");
+    topRight = TextureManager::LoadTexture("res/Images/Tileset/TopRight.png");
 
-    otherThing = TextureManager::LoadTexture("res/images/Tileset/OtherThing.png");
-    otherThing2 = TextureManager::LoadTexture("res/images/Tileset/OtherThing2.png");
+    otherThing = TextureManager::LoadTexture("res/Images/Tileset/OtherThing.png");
+    otherThing2 = TextureManager::LoadTexture("res/Images/Tileset/OtherThing2.png");
 
-    BackGroundImg = TextureManager::LoadTexture("res/images/BackGround/BackGround.png");
+    BackGroundImg = TextureManager::LoadTexture("res/Images/BackGround/BackGround.png");
     // clang-format on
 
     if (!bottomLeft || !bottomMiddle || !bottomRight || !middleLeft
@@ -68,23 +68,23 @@ void Map::init()
     float horizontalSpeed = 0.3;
 
     clouds.emplace_back(std::make_unique<BackgroundCloud>(
-        "res/images/Clouds/Cloud1.png", PositionComponent {1, 5},
+        "res/Images/Clouds/Cloud1.png", PositionComponent {1, 5},
         horizontalSpeed));
 
     horizontalSpeed = -0.25;
 
     clouds.emplace_back(std::make_unique<BackgroundCloud>(
-        "res/images/Clouds/Cloud2.png", PositionComponent {25, 4},
+        "res/Images/Clouds/Cloud2.png", PositionComponent {25, 4},
         horizontalSpeed));
 
     clouds.emplace_back(std::make_unique<BackgroundCloud>(
-        "res/images/Clouds/Cloud3.png", PositionComponent {40, 4},
+        "res/Images/Clouds/Cloud3.png", PositionComponent {40, 4},
         horizontalSpeed));
 
     horizontalSpeed = 0.25;
 
     clouds.emplace_back(std::make_unique<BackgroundCloud>(
-        "res/images/Clouds/Cloud4.png", PositionComponent {-10, 4},
+        "res/Images/Clouds/Cloud4.png", PositionComponent {-10, 4},
         horizontalSpeed));
 
     PhysicsMap::init(lvl1);

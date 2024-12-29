@@ -1,5 +1,6 @@
 #include "PlayerState.h"
 
+#include "Platformer/Core/Music.h"
 #include "Player.h"
 #include "Platformer/Physics/Physics.h"
 #include "Platformer/Core/KeyState.h"
@@ -14,22 +15,26 @@ namespace Platformer
 
 void PlayerState::init()
 {
-    mAnimations.addAnimation("res/images/Player/Animations/Idle.png", 1, 1, 11,
-                             1000 / 12, States::Idling);
+    mAnimations.addAnimation("res/Images/Player/Animations/Idle.png", 1, 1, 11,
+                             1000 / 12, States::IDLING);
 
-    mAnimations.addAnimation("res/images/Player/Animations/Run.png", 1, 1, 12,
-                             1000 / 20, States::Walking);
+    mAnimations.addAnimation("res/Images/Player/Animations/Run.png", 1, 1, 12,
+                             1000 / 20, States::WALKING);
 
-    mAnimations.addAnimation("res/images/Player/Animations/Fall.png", 1, 1,
-                             States::Falling);
+    mAnimations.addAnimation("res/Images/Player/Animations/Fall.png", 1, 1,
+                             States::FALLING);
 
-    mAnimations.addAnimation("res/images/Player/Animations/Jump.png", 1, 1,
-                             States::Jumping);
+    mAnimations.addAnimation("res/Images/Player/Animations/Jump.png", 1, 1,
+                             States::JUMPING);
 
-    mAnimations.addAnimation("res/images/Player/Animations/DoubleJump.png", 1,
-                             1, 6, 1000 / 20, States::DoubleJumping);
+    mAnimations.addAnimation("res/Images/Player/Animations/DoubleJump.png", 1,
+                             1, 6, 1000 / 20, States::DOUBLE_JUMPING);
 
     mAnimations.init();
+
+    mSFXes.addSFX(SFX::JUMP, "res/Sounds/SFX/Player/Jump.mp3");
+    mSFXes.addSFX(SFX::DJUMP, "res/Sounds/SFX/Player/Jump.mp3");
+    mSFXes.addSFX(SFX::RUN, "res/Sounds/SFX/Player/Run.mp3");
 }
 
 void PlayerState::update(bool InAir)
@@ -41,11 +46,11 @@ void PlayerState::update(bool InAir)
     switch (currentState)
     {
             // clang-format off
-        case States::Idling        : updateIdling(); break;
-        case States::Walking       : updateWalking(); break;
-        case States::Falling       : updateFalling(); break;
-        case States::Jumping       : updateJumping(); break;
-        case States::DoubleJumping : updateDoubleJumping(); break;
+        case States::IDLING        : updateIdling(); break;
+        case States::WALKING       : updateWalking(); break;
+        case States::FALLING       : updateFalling(); break;
+        case States::JUMPING       : updateJumping(); break;
+        case States::DOUBLE_JUMPING : updateDoubleJumping(); break;
             // clang-format on
     }
 }
@@ -58,6 +63,11 @@ void PlayerState::render()
     SDL_FRect rect = {pos.x - 0.5f, pos.y - 0.5f, 1, 1};
 
     mAnimations.playAnimation(currentState, rect, dirLeft);
+}
+
+void PlayerState::close()
+{
+    mSFXes.close();
 }
 
 using namespace Platformer::KeyState;
@@ -101,7 +111,7 @@ void PlayerState::fallingCondition()
 {
     if (vel.y < -0.13)
     {
-        currentState = States::Falling;
+        currentState = States::FALLING;
     }
 }
 
@@ -111,12 +121,12 @@ void PlayerState::updateIdling()
     if ((keyState[LEFT] || keyState[RIGHT])
         && !(keyState[LEFT] && keyState[RIGHT]))
     {
-        currentState = States::Walking;
+        currentState = States::WALKING;
     }
 
     if (keyState[SPACE])
     {
-        currentState = States::Jumping;
+        currentState = States::JUMPING;
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
         keyRelease(SPACE);
@@ -126,6 +136,7 @@ void PlayerState::updateIdling()
 
 void PlayerState::updateWalking()
 {
+    mSFXes.playSFX(SFX::RUN);
     // Same as updateMovement
     float maxSpeed {5};
 
@@ -152,12 +163,14 @@ void PlayerState::updateWalking()
     else if ((!keyState[LEFT] && !keyState[RIGHT])
              || (keyState[LEFT] && keyState[RIGHT]))
     {
-        currentState = States::Idling;
+        currentState = States::IDLING;
+        mSFXes.stopSFX(SFX::RUN);
     }
 
     if (keyState[SPACE])
     {
-        currentState = States::Jumping;
+        currentState = States::JUMPING;
+        mSFXes.stopSFX(SFX::RUN);
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
         keyRelease(SPACE);
@@ -168,44 +181,45 @@ void PlayerState::updateWalking()
 
 void PlayerState::updateFalling()
 {
-
     updateMovement();
     if (!inAir)
     {
-        currentState   = States::Idling;
+        currentState   = States::IDLING;
         doubleJumpAble = true;
     }
 
     else if (keyState[SPACE] && doubleJumpAble)
     {
+        b2Body_SetLinearVelocity(Player::playerBody, b2Vec2 {vel.x, 0});
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
-        currentState = States::DoubleJumping;
+        currentState = States::DOUBLE_JUMPING;
         keyRelease(SPACE);
         doubleJumpAble = false;
     }
 
     else if (vel.y == 0)
     {
-        currentState = States::Idling;
+        currentState = States::IDLING;
     }
 }
 
 void PlayerState::updateJumping()
 {
+    mSFXes.playSFX(SFX::JUMP);
     updateMovement();
 
     // same as fallingCondition();
     if (vel.y < 0)
     {
-        currentState = States::Falling;
+        currentState = States::FALLING;
     }
 
     else if (keyState[SPACE] && doubleJumpAble)
     {
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
-        currentState = States::DoubleJumping;
+        currentState = States::DOUBLE_JUMPING;
         keyRelease(SPACE);
         doubleJumpAble = false;
     }
@@ -213,19 +227,20 @@ void PlayerState::updateJumping()
 
 void PlayerState::updateDoubleJumping()
 {
+    mSFXes.playSFX(SFX::DJUMP);
     updateMovement();
-    
+
     // same as fallingCondition();
     if (vel.y < 0)
     {
-        currentState = States::Falling;
+        currentState = States::FALLING;
     }
 
     else if (keyState[SPACE])
     {
         b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
                                           true);
-        currentState = States::Jumping;
+        currentState = States::JUMPING;
         keyRelease(SPACE);
     }
 }

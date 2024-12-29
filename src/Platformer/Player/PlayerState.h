@@ -1,6 +1,7 @@
 #ifndef INCLUDE_PLAYER_PLAYERSTATE_H_
 #define INCLUDE_PLAYER_PLAYERSTATE_H_
 
+#include "Platformer/Core/Music.h"
 #include "Utils/Components/Animation.h"
 #include "box2d/math_functions.h"
 namespace Platformer
@@ -8,11 +9,18 @@ namespace Platformer
 
 enum States
 {
-    Idling,
-    Walking,
-    Falling,
-    Jumping,
-    DoubleJumping,
+    IDLING,
+    WALKING,
+    FALLING,
+    JUMPING,
+    DOUBLE_JUMPING,
+};
+
+enum SFX
+{
+    JUMP,
+    DJUMP,
+    RUN,
 };
 
 class PlayerState
@@ -21,9 +29,10 @@ public:
     void init();
     void update(bool InAir);
     void render();
+    void close();
 
 private:
-    States currentState = States::Idling;
+    States currentState = States::IDLING;
 
     void updateIdling();
     void updateWalking();
@@ -35,7 +44,7 @@ private:
 
     void fallingCondition();
 
-    bool dirLeft = true;
+    bool dirLeft        = true;
     bool inAir          = false;
     bool doubleJumpAble = true;
     b2Vec2 vel {};
@@ -43,6 +52,7 @@ private:
     float force = 15;
 
     Animations mAnimations;
+    SFXs mSFXes;
 };
 
 }  // namespace Platformer

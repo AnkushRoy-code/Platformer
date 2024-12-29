@@ -1,5 +1,7 @@
 #include "Platformer/Core/Platformer.h"
 
+#include "miniaudio.h"
+#include "Platformer/Core/Music.h"
 #include "Platformer/Core/OpenGL.h"
 #include "Platformer/Player/Player.h"
 #include "Platformer/Core/Window.h"
@@ -49,6 +51,14 @@ void Game::init()
 {
     Window::init("Platformer");  // Window should init first
     OpenGL::init();
+    Music::init();
+
+    // bgSound
+    ma_sound_init_from_file(&Music::Engine,
+                            "res/Sounds/Background/BackgroundMusic.mp3",
+                            MA_SOUND_FLAG_STREAM, nullptr, nullptr, &bgSound);
+    ma_sound_set_looping(&bgSound, MA_TRUE);
+    ma_sound_start(&bgSound);
 
     // Utils
     Time::init();
@@ -56,7 +66,6 @@ void Game::init()
 
     mMap.init();  // Should Be initialised after Physics because it has physics
                   // tiles
-
     mPlayer->init();  // Also is using physics
 
     mIsRunning = true;
@@ -109,8 +118,10 @@ void Game::cleanup()
     OpenGL::close();
     Window::close();  // Window should close after opengl
 
-    mPlayer->close();
+    ma_sound_uninit(&bgSound);
+    Music::close();
 
+    mPlayer->close();
 #ifdef DEBUM
     Debug::g_draw.Destroy();
 #endif  // DEBUM

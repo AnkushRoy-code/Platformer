@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(Platformer VERSION 0.2.8 LANGUAGES CXX)
+project(Platformer VERSION 1.0.3 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

@@ -1,6 +1,7 @@
 #ifndef INCLUDE_PLATFORMER_PLATFORMER_H_
 #define INCLUDE_PLATFORMER_PLATFORMER_H_
 
+#include "Platformer/Core/Music.h"
 #include "Platformer/Player/Player.h"
 #include "box2d/id.h"
 #include "Utils/Map.h"
@@ -31,6 +32,8 @@ private:
 
 private:
     std::unique_ptr<Player> mPlayer = std::make_unique<Player>();
+    ma_sound bgSound;
+
     bool mIsRunning {};
     Map mMap {};
 };

@@ -9,6 +9,8 @@ add_library(Core
     KeyState.h
     OpenGL.cpp
     OpenGL.h
+    Music.cpp
+    Music.h
 )
 
 target_include_directories(Core PUBLIC     

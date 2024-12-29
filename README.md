@@ -14,10 +14,9 @@ This will be my first platformer game. It will have features people take for gra
 - [x] Animations
 - [x] ~Enemy AI~ (I said I love pieas)
 - [x] Level System (Not the best rn. Can improve on it)
-+++
-- [ ] Music
-    - [ ] Background Music
-    - [ ] Player Music
+- [x] Music
+    - [x] Background Music
+    - [x] Player Music
 
 ## Dependencies:
 
