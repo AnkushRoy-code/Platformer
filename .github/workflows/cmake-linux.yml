@@ -15,10 +15,10 @@ jobs:
     - name: Cache CMake Dependencies
       uses: actions/cache@v3
       with:
-        path: ${{github.workspace}}build/_deps
+        path: |
+          ${{runner.workspace}}/build/_deps
+          ${{runner.workspace}}/_deps
         key: linux-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
-        restore-keys: |
-          linux-cmake-deps-
 
     - name: Install Dependencies
       run: | 
