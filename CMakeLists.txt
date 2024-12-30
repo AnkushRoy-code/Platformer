@@ -42,15 +42,6 @@ if(isStatic)
     )
     FetchContent_MakeAvailable(sdl2)
 
-    # GLM (OpenGL Mathematics)
-    FetchContent_Declare(
-        glm
-        URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
-        URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    )
-    FetchContent_MakeAvailable(glm)
-
 else() # Note to self: The if statements are not same. If user wants static SDL2 then it has to be compiled. If not then he doesn't need to compile it. FIND_PACKAGE_ARGS option asks CMake ti first find the system for packages if not found compile it. But it doesn't work for Static
 
     # SDL -- Please do not compile this, have a heart for you...
@@ -62,17 +53,16 @@ else() # Note to self: The if statements are not same. If user wants static SDL2
         FIND_PACKAGE_ARGS
     )
     FetchContent_MakeAvailable(SDL2)
-
-    # GLM (OpenGL Mathematics)
-    FetchContent_Declare(
-        glm
-        URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
-        URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-        FIND_PACKAGE_ARGS
-    )
-    FetchContent_MakeAvailable(glm)
 endif()
+
+# GLM (OpenGL Mathematics)
+FetchContent_Declare(
+    glm
+    URL https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip
+    URL_HASH SHA256=9a995de4da09723bd33ef194e6b79818950e5a8f2e154792f02e4615277cfb8d
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(glm)
 
 FetchContent_Declare(
   glew

@@ -16,6 +16,7 @@ add_library(Core
 target_include_directories(Core PUBLIC     
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/lib
+    ${glm_SOURCE_DIR}
 )
 
 if(isStatic)
