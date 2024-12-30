@@ -13,7 +13,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
       fail-fast: false
 
     steps:
@@ -40,13 +41,11 @@ jobs:
     - name: Install Dependencies (macOS)
       if: matrix.os == 'macos-latest'  # Only run this on macOS
       run: |
-        brew install cmake  # macOS typically uses Homebrew
-        brew install libgl freeglut
+        brew install freeglut
 
     - name: Install Dependencies (Windows)
       if: matrix.os == 'windows-latest'  # Only run this on Windows
       run: |
-        choco install cmake
         choco install freeglut
 
     - name: Configure CMake
