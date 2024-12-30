@@ -22,7 +22,11 @@ jobs:
           ${{ runner.os }}-build-deps-
 
     - name: Set up CMake
-      uses: lukka/get-cmake@v4
+      uses: lukka/get-cmake@latest  
+      with:
+        useLocalCache: true
+        useCloudCache: false
+
     - name: Install Dependencies
       run: | 
           sudo apt-get update
