@@ -22,10 +22,7 @@ jobs:
           ${{ runner.os }}-build-deps-
 
     - name: Set up CMake
-      uses: lukka/get-cmake@latest  
-      with:
-        useLocalCache: true
-        useCloudCache: false
+      uses: lukka/get-cmake@latest
 
     - name: Install Dependencies
       run: | 
@@ -40,5 +37,5 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    # - name: CPack
-    #   run: cpack --verbose
+    - name: CPack
+      run: cpack --verbose
