@@ -12,6 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache CMake Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{github.workspace}}build/_deps
+        key: linux-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+        restore-keys: |
+          linux-cmake-deps-
+
     - name: Install Dependencies
       run: | 
           sudo apt-get update
