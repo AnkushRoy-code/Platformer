@@ -7,6 +7,7 @@
 #include <array>
 #include <cstdint>
 #include <GL/glew.h>
+
 #include <vector>
 
 namespace Platformer

@@ -3,7 +3,14 @@
 
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
+
+#if defined(__APPLE__)
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #include <cmath>
 
 namespace Debug

@@ -2,7 +2,15 @@
 #include "Utils/TextureManager.h"
 #include "Platformer/Core/Window.h"
 #include "Utils/Constants.h"
+
+#if defined(__APPLE__)
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
+
+
+
 #include <iostream>
 
 namespace Platformer
