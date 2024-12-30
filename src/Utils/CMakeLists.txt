@@ -26,6 +26,7 @@ endif()
 target_include_directories(Utils PUBLIC 
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/lib
+    ${glew_SOURCE_DIR}/include
 )
 
 target_link_libraries(Utils PUBLIC box2d Components)
