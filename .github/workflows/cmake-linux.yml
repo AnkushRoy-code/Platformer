@@ -10,16 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: Cache CMake Dependencies
-      uses: actions/cache@v3
+    - name: Cache build dependencies
+      uses: actions/cache@v2
       with:
-        path: |
-          ${{runner.workspace}}/build/_deps
-          ${{runner.workspace}}/_deps
-        key: linux-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+        path: build/_deps
+        key: ${{ runner.os }}-build-deps-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-build-deps-
 
+    - name: Set up CMake
+      uses: lukka/get-cmake@v4
     - name: Install Dependencies
       run: | 
           sudo apt-get update
@@ -32,3 +35,6 @@ jobs:
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    # - name: CPack
+    #   run: cpack --verbose
