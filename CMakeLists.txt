@@ -109,7 +109,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION .)
 
 include(InstallRequiredSystemLibraries)
 # CPack configuration
-set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_NAME "Platformer")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_VENDOR "Ankush Roy")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A platformer game created with SDL2.")
