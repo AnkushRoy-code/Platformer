@@ -1,10 +1,15 @@
 #ifndef INCLUDE_DEBUGHELP_BOX2DDEBUGDRAW_H_
 #define INCLUDE_DEBUGHELP_BOX2DDEBUGDRAW_H_
 
-#include <box2d/types.h>
-#include <box2d/math_functions.h>
+#include "box2d/box2d.h"
+#include "box2d/math_functions.h"
 
-#include <GL/glew.h>
+#if defined(__APPLE__)
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 #include <cmath>
 
