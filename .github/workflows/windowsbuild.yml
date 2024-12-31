@@ -1,4 +1,4 @@
-name: Linux/Mac Release build
+name: Windows Release build
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -18,11 +18,11 @@ jobs:
       matrix:
         os: [windows-latest]
         build_type: [Release]
-        c_compiler: [cl]
+        c_compiler: [clang]
         include:
           - os: windows-latest
-            c_compiler: cl
-            cpp_compiler: cl      
+            c_compiler: clang
+            cpp_compiler: clang++
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
