@@ -17,9 +17,6 @@
 #    include <cstdlib>
 #endif
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
 struct RGBA8
 {
     uint8_t r, g, b, a;
