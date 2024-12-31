@@ -127,7 +127,7 @@ void PlayerState::updateIdling()
     if (keyState[SPACE])
     {
         currentState = States::JUMPING;
-        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, impulse},
                                           true);
         keyRelease(SPACE);
     }
@@ -171,7 +171,7 @@ void PlayerState::updateWalking()
     {
         currentState = States::JUMPING;
         mSFXes.stopSFX(SFX::RUN);
-        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, impulse},
                                           true);
         keyRelease(SPACE);
     }
@@ -191,7 +191,7 @@ void PlayerState::updateFalling()
     else if (keyState[SPACE] && doubleJumpAble)
     {
         b2Body_SetLinearVelocity(Player::playerBody, b2Vec2 {vel.x, 0});
-        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, impulse},
                                           true);
         currentState = States::DOUBLE_JUMPING;
         keyRelease(SPACE);
@@ -217,7 +217,7 @@ void PlayerState::updateJumping()
 
     else if (keyState[SPACE] && doubleJumpAble)
     {
-        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, impulse},
                                           true);
         currentState = States::DOUBLE_JUMPING;
         keyRelease(SPACE);
@@ -238,7 +238,7 @@ void PlayerState::updateDoubleJumping()
 
     else if (keyState[SPACE])
     {
-        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, 4.5},
+        b2Body_ApplyLinearImpulseToCenter(Player::playerBody, b2Vec2 {0, impulse},
                                           true);
         currentState = States::JUMPING;
         keyRelease(SPACE);

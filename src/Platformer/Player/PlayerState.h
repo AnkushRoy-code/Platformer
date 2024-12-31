@@ -50,6 +50,7 @@ private:
     b2Vec2 vel {};
     b2Vec2 gravity {};
     float force = 15;
+    float impulse = 3.5;
 
     Animations mAnimations;
     SFXs mSFXes;

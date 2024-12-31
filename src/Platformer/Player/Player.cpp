@@ -37,7 +37,7 @@ void Player::init()
 
     // Foot sensor
     b2Polygon footSensorBox =
-        b2MakeOffsetBox(0.49f, 0.1f, {0, -0.9f}, b2Rot {1.f, 0.f});
+        b2MakeOffsetBox(0.32f, 0.1f, {0, -0.9f}, b2Rot {1.f, 0.f});
     b2ShapeDef footSensorShape = b2DefaultShapeDef();
     footSensorShape.isSensor   = true;
     footSensorId =
