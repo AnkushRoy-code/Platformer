@@ -11,10 +11,8 @@ A simple game I made 😙 with ❤ using C++
 
 ## Demo
 
-<video controls>
-  <source src="docs/Platformer.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Platformer](https://github.com/user-attachments/assets/2b1a8846-c7d6-4ceb-aa28-30ec999c0f8d)
+
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
@@ -57,8 +55,6 @@ This will be my first platformer game. It will have features people take for gra
     - [OpenGL-v2.1+](https://www.opengl.org/)
 - Others:
     - [Catch2](https://github.com/catchorg/Catch2) -- For unit tests (There are none, I just wanted to know how they work. But didn't know when to make them so I have no unit tests. But I have support for them)
-
-![Platformer Image](docs/Platformer.png)
 
 <h2>
     Controls <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/7b282ec6-fcc3-4600-90a7-2c3140549f58" width="30">
@@ -118,7 +114,10 @@ You can run that using this command:
 >[!NOTE]
 >If you run the executable from anywhere other than the root of the build directory you will not be able to load any of the assets (Images and sound files) present in the `res` directory
 
-And there you have it everything I have to offer using my project! I hope you liked it 😄. And if you did please star my repo it gives me motivation to keep on imporving 🙃.
+![Platformer Image](docs/Platformer.png)
+I hope yours too looks like mine :)
+
+And there you have it, everything I have to offer using my project! I hope you liked it 😄. And if you did please star my repo it gives me motivation to keep on imporving 🙃.
 
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
