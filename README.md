@@ -11,7 +11,10 @@ A simple game I made 😙 with ❤ using C++
 
 ## Demo
 
-![App Screenshot]()
+<video controls>
+  <source src="docs/Platformer.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
@@ -55,9 +58,7 @@ This will be my first platformer game. It will have features people take for gra
 - Others:
     - [Catch2](https://github.com/catchorg/Catch2) -- For unit tests (There are none, I just wanted to know how they work. But didn't know when to make them so I have no unit tests. But I have support for them)
 
-![App Screenshot]()
-
-
+![Platformer Image](docs/Platformer.png)
 
 <h2>
     Controls <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/7b282ec6-fcc3-4600-90a7-2c3140549f58" width="30">
