@@ -31,7 +31,7 @@ void Player::init()
 
     b2ShapeDef playerShapeDef         = b2DefaultShapeDef();
     playerShapeDef.density            = 1.0f;
-    playerShapeDef.friction           = 0.1f;
+    playerShapeDef.friction           = 0.2f;
     playerShapeDef.enableSensorEvents = true;
     b2CreatePolygonShape(playerBody, &playerShapeDef, &playerBodyBox);
 

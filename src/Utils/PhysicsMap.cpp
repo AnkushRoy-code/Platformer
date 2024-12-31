@@ -1,7 +1,9 @@
 #include "Utils/PhysicsMap.h"
+
 #include "Platformer/Physics/Physics.h"
-#include "box2d/box2d.h"
-#include "box2d/math_functions.h"
+
+#include <box2d/box2d.h>
+#include <box2d/math_functions.h>
 #include "Utils/Constants.h"
 #include <algorithm>
 #include <queue>
@@ -10,7 +12,7 @@
 #include <vector>
 
 /*
- * So... You reached here... See this joke of a algorithm fucks all the
+ * So... You reached here... See this joke of a algorithm that bangs all the
  * optimisations harder than Will Smith's slap in the middle of making this algo
  * I learnt that lookup in set is faster than of a vector... So in the middle I
  * changed from vec to set :). I might've broken all rules for optimisation, but
@@ -165,7 +167,7 @@ void Platformer::PhysicsMap::init(
 
         if (corners.size() == 5)
         {  // If 4 vertices then arrange them in anticlockwise manner. If more
-           // than 4 you are fucked, all you can do is pray to god that it is
+           // than 4 you are cooked, all you can do is pray to god that it is
            // arranged in anticlockwise manner.
             sortPointsAntiClockwise(corners);
         }

@@ -1,18 +1,19 @@
 #include "Platformer/Core/Platformer.h"
 
-#include "miniaudio.h"
 #include "Platformer/Core/Music.h"
 #include "Platformer/Core/OpenGL.h"
-#include "Platformer/Player/Player.h"
 #include "Platformer/Core/Window.h"
 #include "Platformer/Core/EventHandler.h"
+
+#include "Platformer/Player/Player.h"
+
 #include "Platformer/Physics/Physics.h"
 
 #include "Utils/Map.h"
-#include "Utils/Components/Component.h"
 #include "Utils/TextureManager.h"
 #include "Utils/Time.h"
 
+#include <miniaudio.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
@@ -46,7 +47,8 @@ void Game::run()
     cleanup();
 }
 
-void printDependencyVersions();  // Forward declaration
+void printDependencyVersions();
+
 void Game::init()
 {
     Window::init("Platformer");  // Window should init first
@@ -65,7 +67,7 @@ void Game::init()
     Physics::init();
 
     mMap.init();  // Should Be initialised after Physics because it has physics
-                  // tiles
+                  // which depends on box2d tiles
     mPlayer->init();  // Also is using physics
 
     mIsRunning = true;

@@ -1,7 +1,8 @@
 #ifndef INCLUDE_UTILS_BACKGROUND_H_
 #define INCLUDE_UTILS_BACKGROUND_H_
 
-#include "Components/Component.h"
+#include "Utils/Components/Component.h"
+
 #include <filesystem>
 #include <GL/glew.h>
 

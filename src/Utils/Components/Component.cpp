@@ -1,8 +1,9 @@
 #include "Utils/Components/Component.h"
+
 #include "Utils/TextureManager.h"
 #include "Utils/Time.h"
 
-#include "SDL_rect.h"
+#include <SDL_rect.h>
 
 namespace Platformer
 {

@@ -1,9 +1,10 @@
 #ifndef INCLUDE_COMPONENTS_ANIMATION_H_
 #define INCLUDE_COMPONENTS_ANIMATION_H_
 
-#include "SDL_rect.h"
 #include "Utils/Components/Component.h"
+
 #include <vector>
+#include <SDL_rect.h>
 
 namespace Platformer
 {

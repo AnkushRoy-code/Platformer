@@ -40,9 +40,11 @@ bool Window::init(const std::string &Title)
         Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         // Needs cleanup. Will do later.
         WindowScale * TILESET_WIDTH
-            * TILESET_SIZE,  // The width is tiles * tilesize here 30 * 32
+            * TILESET_SIZE,  // The width is tiles * tilesize * scale here
+                             // 30 * 32 * scale
+
         WindowScale * TILESET_HEIGHT
-            * TILESET_SIZE,  // Same as width but 18 * 32
+            * TILESET_SIZE,  // Same as width but 18 * 32 * scale
         window_flags);
 
     if (window == nullptr)
@@ -73,7 +75,6 @@ void Window::close()
     SDL_Quit();
 }
 
-// https://github.com/indianakernick/EnTT-Pacman/blob/master/src/core/app.cpp#L22
 float Window::getScaleFactor()
 {
     SDL_Rect bounds {};

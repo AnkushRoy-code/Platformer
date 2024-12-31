@@ -1,5 +1,7 @@
 #include "Animation.h"
+
 #include "Utils/Time.h"
+
 #include <iostream>
 
 namespace Platformer
@@ -57,7 +59,7 @@ void Animation::drawFlipped(SDL_FRect Rect)
 // You know why I do not have error checking only in some places? One reason is
 // I am lazy.
 
-// The reason this has error checking is because I was fucked making this
+// The reason this has error checking is because I was cooked making this
 // because of no error checking
 
 void Animations::addAnimation(const std::filesystem::path &Path,

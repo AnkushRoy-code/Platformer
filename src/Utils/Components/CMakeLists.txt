@@ -1,3 +1,5 @@
+# I thought I'd have a lot of components
+
 add_library(Components
     Component.cpp
     Component.h

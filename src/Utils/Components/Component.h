@@ -4,6 +4,7 @@
 #define INCLUDE_PLATFORMER_COMPONENT_H_
 
 #include "Utils/TextureManager.h"
+
 #include <SDL_rect.h>
 #include <filesystem>
 

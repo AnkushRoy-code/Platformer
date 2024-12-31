@@ -3,9 +3,6 @@
 
 #include "box2dDebugDraw.h"
 
-#include "box2d/math_functions.h"
-#include "box2d/types.h"
-
 #include <vector>
 #include <cassert>
 #include <cstdarg>
@@ -583,12 +580,12 @@ void Draw::DrawString(int x, int y, const char *string, ...)
     //	return;
     // }
 
-    // Fuck you
+    // HAHAHAHA you
 }
 
 void Draw::DrawString(b2Vec2 p, const char *string, ...)
 {
-    // Fuck yu again
+    // HHAHAHA yu again
 }
 
 void Draw::DrawAABB(b2AABB aabb, b2HexColor c)

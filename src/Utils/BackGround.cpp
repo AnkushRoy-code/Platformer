@@ -1,8 +1,8 @@
 #include "Utils/BackGround.h"
-#include "Components/Component.h"
-#include "Constants.h"
-#include "TextureManager.h"
-#include "Time.h"
+
+#include "Utils/Constants.h"
+#include "Utils/TextureManager.h"
+#include "Utils/Time.h"
 
 namespace Platformer
 {

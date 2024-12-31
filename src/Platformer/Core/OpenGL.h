@@ -1,7 +1,7 @@
 #ifndef INCLUDE_PLATFORMER_OPENGL_H_
 #define INCLUDE_PLATFORMER_OPENGL_H_
 
-// I spent wayy to long documenting this...IDK why
+// I spent wayy to long documenting this...IDK why the functions have also changed since then... I worked on it so I am gonna keep it
 
 namespace Platformer
 {
@@ -17,7 +17,7 @@ public:
      * @param ShaderProgramme GLuint& The shader Programme.
      * @param VAO GLuint& VAO the vertex array object.
      * @param VBO GLuint& why am I still writing these... aren't this obvious?
-     * @param EBO Fuck you.
+     * @param EBO why you still reading?
      * @return void returns nothing changes the parameters though.
      *
      * @example
@@ -37,7 +37,7 @@ public:
      * @param ShaderProgramme GLuint& The shader Programme.
      * @param VAO GLuint& VAO the vertex array object.
      * @param VBO GLuint& why am I still writing these... aren't this obvious?
-     * @param EBO Fuck you.
+     * @param EBO why you still reading?
      * @return void returns nothing.
      *
      * @example

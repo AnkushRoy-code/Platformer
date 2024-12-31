@@ -1,4 +1,5 @@
 #define MINIAUDIO_IMPLEMENTATION  // compile the functions here
+
 #include "Music.h"
 #include <filesystem>
 #include <iostream>

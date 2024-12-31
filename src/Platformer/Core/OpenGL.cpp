@@ -1,4 +1,5 @@
 #include "OpenGL.h"
+
 #include "Utils/TextureManager.h"
 #include "Platformer/Core/Window.h"
 #include "Utils/Constants.h"

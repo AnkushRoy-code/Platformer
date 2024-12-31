@@ -1,7 +1,6 @@
 #include "Platformer/Core/EventHandler.h"
 
 #include <SDL.h>
-#include <box2d/box2d.h>
 #include <functional>
 
 #include "Platformer/Core/KeyState.h"

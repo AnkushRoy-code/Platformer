@@ -3,8 +3,10 @@
 
 #include <filesystem>
 #include <vector>
+
 // My exams are close and I want to close this project faster. So whatever works
 // will work. My other code is enou
+
 #include "miniaudio.h"
 
 namespace Platformer

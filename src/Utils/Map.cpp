@@ -1,11 +1,14 @@
-#include "BackGround.h"
-#include "Components/Component.h"
+#include "Utils/Map.h"
+
 #include "Utils/PhysicsMap.h"
 #include "Utils/TextureManager.h"
 #include "Utils/Constants.h"
+
 #include <iostream>
 #include <memory>
-#include "Utils/Map.h"
+
+// I thought it'd be temporary... Either way it wont be hard to read arrays from
+// another file  so I must be good
 
 // clang-format off
 std::array<std::array<std::uint8_t, Platformer::TILESET_WIDTH>, Platformer::TILESET_HEIGHT> lvl1 {{
@@ -39,18 +42,18 @@ void Map::init()
 {
 
     // clang-format off
-    bottomLeft = TextureManager::LoadTexture("res/Images/Tileset/BottomLeft.png");
-    bottomMiddle = TextureManager::LoadTexture("res/Images/Tileset/BottomMiddle.png");
-    bottomRight = TextureManager::LoadTexture("res/Images/Tileset/BottomRight.png");
-    middleLeft = TextureManager::LoadTexture("res/Images/Tileset/MiddleLeft.png");
-    middleMiddle = TextureManager::LoadTexture("res/Images/Tileset/MiddleMiddle.png");
-    middleRight = TextureManager::LoadTexture("res/Images/Tileset/MiddleRight.png");
-    topLeft = TextureManager::LoadTexture("res/Images/Tileset/TopLeft.png");
-    topMiddle = TextureManager::LoadTexture("res/Images/Tileset/TopMiddle.png");
-    topRight = TextureManager::LoadTexture("res/Images/Tileset/TopRight.png");
+    bottomLeft    = TextureManager::LoadTexture("res/Images/Tileset/BottomLeft.png");
+    bottomMiddle  = TextureManager::LoadTexture("res/Images/Tileset/BottomMiddle.png");
+    bottomRight   = TextureManager::LoadTexture("res/Images/Tileset/BottomRight.png");
+    middleLeft    = TextureManager::LoadTexture("res/Images/Tileset/MiddleLeft.png");
+    middleMiddle  = TextureManager::LoadTexture("res/Images/Tileset/MiddleMiddle.png");
+    middleRight   = TextureManager::LoadTexture("res/Images/Tileset/MiddleRight.png");
+    topLeft       = TextureManager::LoadTexture("res/Images/Tileset/TopLeft.png");
+    topMiddle     = TextureManager::LoadTexture("res/Images/Tileset/TopMiddle.png");
+    topRight      = TextureManager::LoadTexture("res/Images/Tileset/TopRight.png");
 
-    otherThing = TextureManager::LoadTexture("res/Images/Tileset/OtherThing.png");
-    otherThing2 = TextureManager::LoadTexture("res/Images/Tileset/OtherThing2.png");
+    otherThing    = TextureManager::LoadTexture("res/Images/Tileset/OtherThing.png");
+    otherThing2   = TextureManager::LoadTexture("res/Images/Tileset/OtherThing2.png");
 
     BackGroundImg = TextureManager::LoadTexture("res/Images/BackGround/BackGround.png");
     // clang-format on

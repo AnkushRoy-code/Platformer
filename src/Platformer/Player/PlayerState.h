@@ -7,6 +7,7 @@
 namespace Platformer
 {
 
+// enum class States
 enum States
 {
     IDLING,
@@ -16,6 +17,7 @@ enum States
     DOUBLE_JUMPING,
 };
 
+// enum class SFX
 enum SFX
 {
     JUMP,

@@ -1,9 +1,9 @@
 #ifndef INCLUDE_INPUT_EVENTHANDLER_H_
 #define INCLUDE_INPUT_EVENTHANDLER_H_
 
-#include "box2d/id.h"
 #include <SDL_events.h>
 #include <functional>
+
 namespace Platformer
 {
 class Input
