@@ -11,7 +11,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> Time::mPreviousTime;
 std::chrono::time_point<std::chrono::high_resolution_clock> Time::mCurrentTime;
 std::chrono::time_point<std::chrono::high_resolution_clock> Time::mStartTime;
 
-const int Time::mTargetFPS = 60;  // In seconds
+const int Time::mTargetFPS = 120;  // In seconds
 const std::chrono::milliseconds Time::mFrameDuration =
     std::chrono::milliseconds(1000 / mTargetFPS);  // In miliseconds
 
