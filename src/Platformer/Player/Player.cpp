@@ -22,18 +22,34 @@ void Player::init()
     playerBody = b2CreateBody(Physics::worldId, &playerBodyDef);
 
     // Player body
+
     b2Polygon playerBodyBox = b2MakeOffsetBox(
         0.34375, 0.375, {0, -0.125}, b2Rot {1.f, 0.f});  // I did my maths
+
+    // b2Polygon playerBodyBoxRound = // round box also solves the problem of
+    // // stuck in the corner of ground but does something weird with my inAir
+    // // detection so no
+    //  
+    //     b2MakeOffsetRoundedBox(0.34375, 0.375, {0, -0.125}, b2Rot {1.f, 0.f},
+    //                            0.05f);
 
     // I hate clang-format. The lua formatter is so good it doesn't get in your
     // way. Might be a lil slow but gets the job done. Look at what clang
     // clang-format did to this.
 
+    // b2Capsule capsule;
+    // // THey are good but make new problems and I and exams
+    // // are really near now. I shouldn't do this
+    // capsule.center1 = (b2Vec2) {0.0f, -0.125f};
+    // capsule.center2 = (b2Vec2) {0.0f, -0.0625f};
+    // capsule.radius  = 0.34375f;
+
     b2ShapeDef playerShapeDef         = b2DefaultShapeDef();
-    playerShapeDef.density            = 1.0f;
     playerShapeDef.friction           = 0.2f;
     playerShapeDef.enableSensorEvents = true;
     b2CreatePolygonShape(playerBody, &playerShapeDef, &playerBodyBox);
+    // b2CreatePolygonShape(playerBody, &playerShapeDef, &playerBodyBoxRound);
+    // b2CreateCapsuleShape(playerBody, &playerShapeDef, &capsule);
 
     // Foot sensor
     b2Polygon footSensorBox =
@@ -86,7 +102,8 @@ void Player::update()
     mPlayerState->update(inAir);
 }
 
-void Player::render() {
+void Player::render()
+{
     mPlayerState->render();
 }
 
